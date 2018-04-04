@@ -66,7 +66,7 @@ namespace cryptonote
 
   struct tx_extra_pub_key
   {
-    Crypto::public_key pub_key;
+    Crypto::PublicKey pub_key;
 
     BEGIN_SERIALIZE()
       FIELD(pub_key)
