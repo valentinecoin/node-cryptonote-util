@@ -20,7 +20,7 @@ namespace tools
   bool create_directories_if_necessary(const std::string& path);
   std::error_code replace_file(const std::string& replacement_name, const std::string& replaced_name);
 
-  inline Crypto::hash get_proof_of_trust_hash(const nodetool::proof_of_trust& pot)
+  inline Crypto::Hash get_proof_of_trust_hash(const nodetool::proof_of_trust& pot)
   {
     std::string s;
     s.append(reinterpret_cast<const char*>(&pot.peer_id), sizeof(pot.peer_id));
