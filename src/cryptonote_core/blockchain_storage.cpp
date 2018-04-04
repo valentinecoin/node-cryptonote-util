@@ -36,7 +36,7 @@ bool blockchain_storage::have_tx(const Crypto::Hash &id)
   return m_transactions.find(id) != m_transactions.end();
 }
 //------------------------------------------------------------------
-bool blockchain_storage::have_tx_keyimg_as_spent(const Crypto::key_image &key_im)
+bool blockchain_storage::have_tx_keyimg_as_spent(const Crypto::KeyImage &key_im)
 {
   CRITICAL_REGION_LOCAL(m_blockchain_lock);
   return  m_spent_keys.find(key_im) != m_spent_keys.end();
@@ -173,7 +173,7 @@ bool blockchain_storage::purge_transaction_keyimages_from_blockchain(const trans
 
     bool operator()(const txin_to_key& inp) const
     {
-      //const Crypto::key_image& ki = inp.k_image;
+      //const Crypto::KeyImage& ki = inp.k_image;
       auto r = m_spent_keys.find(inp.k_image);
       if(r != m_spent_keys.end())
       {
@@ -1227,7 +1227,7 @@ bool blockchain_storage::add_transaction_from_block(const transaction& tx, const
     {}
     bool operator()(const txin_to_key& in) const
     {
-      const Crypto::key_image& ki = in.k_image;
+      const Crypto::KeyImage& ki = in.k_image;
       auto r = m_spent_keys.insert(ki);
       if(!r.second)
       {
