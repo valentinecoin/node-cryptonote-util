@@ -40,4 +40,4 @@ void hmac_blake224_final(hmac_state *, uint8_t *);
 void hmac_blake256_hash(uint8_t *, const uint8_t *, uint64_t, const uint8_t *, uint64_t);
 void hmac_blake224_hash(uint8_t *, const uint8_t *, uint64_t, const uint8_t *, uint64_t);
 
-#endif /* _BLAKE256_H_ */
+#endif /* _BLAKE256_H_ */ 
