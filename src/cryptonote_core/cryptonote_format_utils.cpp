@@ -13,16 +13,6 @@ using namespace epee;
 #include "crypto/hash.h"
 #include "serialization/binary_utils.h"
 
-std::stringstream& operator<<(std::stringstream& out, const std::wstring& ws)
-{
-	std::string as = string_encoding::convert_to_ansii(ws);
-	out << as;
-	return out;
-}
-	template<class _CharT, class _TraitsT, class _Ty>
-std::basic_ostream<_CharT, _TraitsT>&
-  operator<<(std::basic_ostream<_CharT, _TraitsT>&& _Stream, const _Ty& _Value);
-
 namespace cryptonote
 {
 	
