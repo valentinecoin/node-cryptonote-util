@@ -32,15 +32,15 @@ namespace boost
   {
     a & reinterpret_cast<char (&)[sizeof(Crypto::SecretKey)]>(x);
   }
-  template <class Archive>
+  /*template <class Archive>
   inline void serialize(Archive &a, Crypto::key_derivation &x, const boost::serialization::version_type ver)
   {
     a & reinterpret_cast<char (&)[sizeof(Crypto::key_derivation)]>(x);
-  }
+  }*/
   template <class Archive>
-  inline void serialize(Archive &a, Crypto::key_image &x, const boost::serialization::version_type ver)
+  inline void serialize(Archive &a, Crypto::KeyImage &x, const boost::serialization::version_type ver)
   {
-    a & reinterpret_cast<char (&)[sizeof(Crypto::key_image)]>(x);
+    a & reinterpret_cast<char (&)[sizeof(Crypto::KeyImage)]>(x);
   }
 
   template <class Archive>
