@@ -148,7 +148,7 @@ void blake256_update(state *S, const uint8_t *data, uint64_t datalen) {
 
     if (datalen > 0) {
         memcpy((void *) (S->buf + left), (void *) data, datalen >> 3);
-        S->buflen = (left << 3) + datalen;
+        S->buflen = (left << 3) + (int)datalen;
     } else {
         S->buflen = 0;
     }
@@ -323,4 +323,4 @@ void hmac_blake224_hash(uint8_t *out, const uint8_t *key, uint64_t keylen, const
     hmac_blake224_init(&S, key, keylen);
     hmac_blake224_update(&S, in, inlen * 8);
     hmac_blake224_final(&S, out);
-}
+} 
