@@ -96,7 +96,7 @@ namespace cryptonote
 		uint64_t summary_amounts = 0;
 		for (size_t no = 0; no < out_amounts.size(); no++)
 		{
-			Crypto::key_derivation derivation = AUTO_VAL_INIT(derivation);;
+			Crypto::PublicKey = AUTO_VAL_INIT(derivation);;
 			Crypto::PublicKey out_eph_public_key = AUTO_VAL_INIT(out_eph_public_key);
 			bool r = Crypto::generate_key_derivation(miner_address.m_view_public_key, txkey.sec, derivation);
 			CHECK_AND_ASSERT_MES(r, false, "while creating outs: failed to generate_key_derivation(" << miner_address.m_view_public_key << ", " << txkey.sec << ")");
@@ -124,7 +124,7 @@ namespace cryptonote
 		return true;
 	}
 	//---------------------------------------------------------------
-	bool generate_key_image_helper(const account_keys& ack, const Crypto::PublicKey& tx_public_key, size_t real_output_index, keypair& in_ephemeral, Crypto::key_image& ki)
+	bool generate_key_image_helper(const account_keys& ack, const Crypto::PublicKey& tx_public_key, size_t real_output_index, keypair& in_ephemeral, Crypto::KeyImage& ki)
 	{
 		Crypto::key_derivation recv_derivation = AUTO_VAL_INIT(recv_derivation);
 		bool r = Crypto::generate_key_derivation(tx_public_key, ack.m_view_secret_key, recv_derivation);
@@ -350,7 +350,7 @@ namespace cryptonote
 			//key_derivation recv_derivation;
 			in_contexts.push_back(input_generation_context_data());
 			keypair& in_ephemeral = in_contexts.back().in_ephemeral;
-			Crypto::key_image img;
+			Crypto::KeyImage img;
 			if (!generate_key_image_helper(sender_account_keys, src_entr.real_out_tx_key, src_entr.real_output_in_tx_index, in_ephemeral, img))
 				return false;
 
@@ -386,7 +386,7 @@ namespace cryptonote
 		BOOST_FOREACH(const tx_destination_entry& dst_entr, shuffled_dsts)
 		{
 			CHECK_AND_ASSERT_MES(dst_entr.amount > 0, false, "Destination with wrong amount: " << dst_entr.amount);
-			Crypto::key_derivation derivation;
+			Crypto::PublicKey derivation;
 			Crypto::PublicKey out_eph_public_key;
 			bool r = Crypto::generate_key_derivation(dst_entr.addr.m_view_public_key, txkey.sec, derivation);
 			CHECK_AND_ASSERT_MES(r, false, "at creation outs: failed to generate_key_derivation(" << dst_entr.addr.m_view_public_key << ", " << txkey.sec << ")");
