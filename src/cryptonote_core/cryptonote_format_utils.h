@@ -69,7 +69,7 @@ namespace cryptonote
   bool lookup_acc_outs(const account_keys& acc, const transaction& tx, std::vector<size_t>& outs, uint64_t& money_transfered);
   bool get_tx_fee(const transaction& tx, uint64_t & fee);
   uint64_t get_tx_fee(const transaction& tx);
-  bool generate_key_image_helper(const account_keys& ack, const Crypto::PublicKey& tx_public_key, size_t real_output_index, keypair& in_ephemeral, Crypto::key_image& ki);
+  bool generate_key_image_helper(const account_keys& ack, const Crypto::PublicKey& tx_public_key, size_t real_output_index, keypair& in_ephemeral, Crypto::KeyImage& ki);
   void get_blob_hash(const blobdata& blob, Crypto::Hash& res);
   Crypto::Hash get_blob_hash(const blobdata& blob);
   std::string short_hash_str(const Crypto::Hash& h);
