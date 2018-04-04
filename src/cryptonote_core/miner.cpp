@@ -66,7 +66,7 @@ namespace cryptonote
     m_diffic = di;
     m_height = height;
     ++m_template_no;
-    m_starter_nonce = crypto::rand<uint32_t>();
+    m_starter_nonce = Crypto::rand<uint32_t>();
     return true;
   }
   //-----------------------------------------------------------------------------------------------------
@@ -197,7 +197,7 @@ namespace cryptonote
   {
     m_mine_address = adr;
     m_threads_total = static_cast<uint32_t>(threads_count);
-    m_starter_nonce = crypto::rand<uint32_t>();
+    m_starter_nonce = Crypto::rand<uint32_t>();
     CRITICAL_REGION_LOCAL(m_threads_lock);
     if(is_mining())
     {
@@ -256,7 +256,7 @@ namespace cryptonote
   {
     for(; bl.nonce != std::numeric_limits<uint32_t>::max(); bl.nonce++)
     {
-      crypto::hash h;
+      Crypto::hash h;
       get_block_longhash(bl, h, height);
 
       if(check_hash(h, diffic))
@@ -337,7 +337,7 @@ namespace cryptonote
       }
 
       b.nonce = nonce;
-      crypto::hash h;
+      Crypto::hash h;
       get_block_longhash(b, h, height);
 
       if(check_hash(h, local_diff))
@@ -362,4 +362,4 @@ namespace cryptonote
   }
   //-----------------------------------------------------------------------------------------------------
 }
-
+ 
