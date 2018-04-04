@@ -55,7 +55,7 @@ std::ostream &print256(std::ostream &o, const T &v) {
 
 bool parse_hash256(const std::string str_hash, Crypto::Hash& hash);
 
-namespace crypto {
+namespace Crypto {
   inline std::ostream &operator <<(std::ostream &o, const Crypto::PublicKey &v) { return print256(o, v); }
   inline std::ostream &operator <<(std::ostream &o, const Crypto::SecretKey &v) { return print256(o, v); }
   inline std::ostream &operator <<(std::ostream &o, const Crypto::KeyDerivation &v) { return print256(o, v); }
