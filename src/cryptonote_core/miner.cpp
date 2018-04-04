@@ -256,7 +256,7 @@ namespace cryptonote
   {
     for(; bl.nonce != std::numeric_limits<uint32_t>::max(); bl.nonce++)
     {
-      Crypto::hash h;
+      Crypto::Hash h;
       get_block_longhash(bl, h, height);
 
       if(check_hash(h, diffic))
@@ -337,7 +337,7 @@ namespace cryptonote
       }
 
       b.nonce = nonce;
-      Crypto::hash h;
+      Crypto::Hash h;
       get_block_longhash(b, h, height);
 
       if(check_hash(h, local_diff))
