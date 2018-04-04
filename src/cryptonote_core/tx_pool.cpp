@@ -233,7 +233,7 @@ namespace cryptonote
     return false;
   }
   //---------------------------------------------------------------------------------
-  bool tx_memory_pool::have_tx_keyimg_as_spent(const Crypto::key_image& key_im)
+  bool tx_memory_pool::have_tx_keyimg_as_spent(const Crypto::KeyImage& key_im)
   {
     CRITICAL_REGION_LOCAL(m_transactions_lock);
     return m_spent_key_images.end() != m_spent_key_images.find(key_im);
@@ -291,7 +291,7 @@ namespace cryptonote
     return true;
   }
   //---------------------------------------------------------------------------------
-  bool tx_memory_pool::have_key_images(const std::unordered_set<Crypto::key_image>& k_images, const transaction& tx)
+  bool tx_memory_pool::have_key_images(const std::unordered_set<Crypto::KeyImage>& k_images, const transaction& tx)
   {
     for(size_t i = 0; i!= tx.vin.size(); i++)
     {
@@ -302,7 +302,7 @@ namespace cryptonote
     return false;
   }
   //---------------------------------------------------------------------------------
-  bool tx_memory_pool::append_key_images(std::unordered_set<Crypto::key_image>& k_images, const transaction& tx)
+  bool tx_memory_pool::append_key_images(std::unordered_set<Crypto::KeyImage>& k_images, const transaction& tx)
   {
     for(size_t i = 0; i!= tx.vin.size(); i++)
     {
@@ -356,7 +356,7 @@ namespace cryptonote
     fee = 0;
 
     size_t max_total_size = 2 * median_size - CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE;
-    std::unordered_set<Crypto::key_image> k_images;
+    std::unordered_set<Crypto::KeyImage> k_images;
     BOOST_FOREACH(transactions_container::value_type& tx, m_transactions)
     {
       if (max_total_size < total_size + tx.second.blob_size)
