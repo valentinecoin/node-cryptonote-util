@@ -89,7 +89,7 @@ namespace nodetool
   template<class t_payload_net_handler>
   bool node_server<t_payload_net_handler>::make_default_config()
   {
-    m_config.m_peer_id  = crypto::rand<uint64_t>();
+    m_config.m_peer_id  = Crypto::rand<uint64_t>();
     return true;
   }
   //-----------------------------------------------------------------------------------
@@ -113,7 +113,7 @@ namespace nodetool
       for(const std::string& pr_str: perrs)
       {
         nodetool::peerlist_entry pe = AUTO_VAL_INIT(pe);
-        pe.id = crypto::rand<uint64_t>();
+        pe.id = Crypto::rand<uint64_t>();
         bool r = parse_peer_from_string(pe.adr, pr_str);
         CHECK_AND_ASSERT_MES(r, false, "Failed to parse address from string: " << pr_str);
         m_command_line_peers.push_back(pe);
@@ -455,7 +455,7 @@ namespace nodetool
     if(!max_index)
       return 0;
 
-    size_t x = crypto::rand<size_t>()%(max_index+1);
+    size_t x = Crypto::rand<size_t>()%(max_index+1);
     size_t res = (x*x*x)/(max_index*max_index); //parabola \/
     LOG_PRINT_L3("Random connection index=" << res << "(x="<< x << ", max_index=" << max_index << ")");
     return res;
@@ -595,7 +595,7 @@ namespace nodetool
     if(!m_peerlist.get_white_peers_count() && m_seed_nodes.size())
     {
       size_t try_count = 0;
-      size_t current_index = crypto::rand<size_t>()%m_seed_nodes.size();
+      size_t current_index = Crypto::rand<size_t>()%m_seed_nodes.size();
       while(true)
       {        
         if(m_net_server.is_stop_signal_sent())
@@ -778,10 +778,10 @@ namespace nodetool
       LOG_ERROR("check_trust failed: peer_id mismatch (passed " << tr.peer_id << ", expected " << m_config.m_peer_id<< ")");
       return false;
     }
-    crypto::public_key pk = AUTO_VAL_INIT(pk);
+    Crypto::public_key pk = AUTO_VAL_INIT(pk);
     string_tools::hex_to_pod(P2P_STAT_TRUSTED_PUB_KEY, pk);
-    crypto::hash h = tools::get_proof_of_trust_hash(tr);
-    if(!crypto::check_signature(h, pk, tr.sign))
+    Crypto::hash h = tools::get_proof_of_trust_hash(tr);
+    if(!Crypto::check_signature(h, pk, tr.sign))
     {
       LOG_ERROR("check_trust failed: sign check failed");
       return false;
@@ -1085,4 +1085,4 @@ namespace nodetool
     LOG_PRINT_L2("["<< net_utils::print_connection_context(context) << "] CLOSE CONNECTION");
   }
   //-----------------------------------------------------------------------------------
-}
+} 
