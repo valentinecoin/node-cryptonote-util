@@ -48,7 +48,7 @@ static bool fillExtra(cryptonote::block& block1, const cryptonote::block& block2
     return true;
 }
 
-static bool mergeBlocks(const cryptonote::block& block1, cryptonote::block& block2, const std::vector<crypto::hash>& branch2) {
+static bool mergeBlocks(const cryptonote::block& block1, cryptonote::block& block2, const std::vector<Crypto::hash>& branch2) {
     block2.timestamp = block1.timestamp;
     block2.parent_block.major_version = block1.major_version;
     block2.parent_block.minor_version = block1.minor_version;
@@ -56,8 +56,8 @@ static bool mergeBlocks(const cryptonote::block& block1, cryptonote::block& bloc
     block2.parent_block.nonce = block1.nonce;
     block2.parent_block.miner_tx = block1.miner_tx;
     block2.parent_block.number_of_transactions = block1.tx_hashes.size() + 1;
-    block2.parent_block.miner_tx_branch.resize(crypto::tree_depth(block1.tx_hashes.size() + 1));
-    std::vector<crypto::hash> transactionHashes;
+    block2.parent_block.miner_tx_branch.resize(Crypto::tree_depth(block1.tx_hashes.size() + 1));
+    std::vector<Crypto::hash> transactionHashes;
     transactionHashes.push_back(cryptonote::get_transaction_hash(block1.miner_tx));
     std::copy(block1.tx_hashes.begin(), block1.tx_hashes.end(), std::back_inserter(transactionHashes));
     tree_branch(transactionHashes.data(), transactionHashes.size(), block2.parent_block.miner_tx_branch.data());
@@ -130,7 +130,7 @@ Handle<Value> get_block_id(const Arguments& args) {
     if (!parse_and_validate_block_from_blob(input, b))
         return except("Failed to parse block");
 
-    crypto::hash block_id;
+    Crypto::hash block_id;
     if (!get_block_hash(b, block_id))
         return except("Failed to calculate hash for block");
 
@@ -169,7 +169,7 @@ Handle<Value> construct_block_blob(const Arguments& args) {
         if (!construct_parent_block(b, parent_block))
             return except("Failed to construct parent block");
 
-        if (!mergeBlocks(parent_block, b, std::vector<crypto::hash>()))
+        if (!mergeBlocks(parent_block, b, std::vector<Crypto::hash>()))
             return except("Failed to postprocess mining block");
     }
     if (b.major_version == BLOCK_MAJOR_VERSION_3) {
@@ -178,7 +178,7 @@ Handle<Value> construct_block_blob(const Arguments& args) {
         if (!construct_parent_block(b, parent_block))
             return except("Failed to construct parent block");
 
-        if (!mergeBlocks(parent_block, b, std::vector<crypto::hash>()))
+        if (!mergeBlocks(parent_block, b, std::vector<Crypto::hash>()))
             return except("Failed to postprocess mining block");
     }
 
@@ -236,7 +236,7 @@ Handle<Value> address_decode(const Arguments& args) {
     if (!::serialization::parse_binary(data, adr))
         return scope.Close(Undefined());
 
-    if (!crypto::check_key(adr.m_spend_public_key) || !crypto::check_key(adr.m_view_public_key))
+    if (!Crypto::check_key(adr.m_spend_public_key) || !Crypto::check_key(adr.m_view_public_key))
         return scope.Close(Undefined());
 
     return scope.Close(Integer::New(static_cast<uint32_t>(prefix)));
@@ -250,4 +250,4 @@ void init(Handle<Object> exports) {
     exports->Set(String::NewSymbol("address_decode"), FunctionTemplate::New(address_decode)->GetFunction());
 }
 
-NODE_MODULE(cryptonote, init)
+NODE_MODULE(cryptonote, init) 
