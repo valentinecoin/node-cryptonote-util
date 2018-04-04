@@ -172,7 +172,7 @@ Handle<Value> construct_block_blob(const Arguments& args) {
         if (!mergeBlocks(parent_block, b, std::vector<Crypto::Hash>()))
             return except("Failed to postprocess mining block");
     }
-    if (b.major_version == BLOCK_MAJOR_VERSION_3) {
+    if (b.major_version >= BLOCK_MAJOR_VERSION_3) {
         block parent_block;
         b.parent_block.nonce = nonce;
         if (!construct_parent_block(b, parent_block))
