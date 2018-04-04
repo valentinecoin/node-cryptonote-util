@@ -283,7 +283,7 @@ namespace cryptonote
     return m_blockchain_storage.get_total_transactions();
   }
   //-----------------------------------------------------------------------------------------------
-  bool core::get_outs(uint64_t amount, std::list<Crypto::public_key>& pkeys)
+  bool core::get_outs(uint64_t amount, std::list<Crypto::PublicKey>& pkeys)
   {
     return m_blockchain_storage.get_outs(amount, pkeys);
   }
