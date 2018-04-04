@@ -23,8 +23,8 @@ namespace cryptonote
     };
 
     state m_state;
-    std::list<crypto::hash> m_needed_objects;
-    std::unordered_set<crypto::hash> m_requested_objects;
+    std::list<Crypto::hash> m_needed_objects;
+    std::unordered_set<Crypto::hash> m_requested_objects;
     uint64_t m_remote_blockchain_height;
     uint64_t m_last_response_height;
     epee::copyable_atomic m_callback_request_count; //in debug purpose: problem with double callback rise
@@ -48,4 +48,4 @@ namespace cryptonote
     }    
   }
 
-}
+} 
