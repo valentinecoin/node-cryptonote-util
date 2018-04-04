@@ -33,10 +33,10 @@ namespace cryptonote
   struct tx_extra_merge_mining_tag;
 
   // Implemented in cryptonote_format_utils.cpp
-  bool get_transaction_hash(const transaction& t, Crypto::hash& res);
+  bool get_transaction_hash(const transaction& t, Crypto::Hash& res);
   bool get_mm_tag_from_extra(const std::vector<uint8_t>& tx, tx_extra_merge_mining_tag& mm_tag);
 
-  const static Crypto::hash null_hash = AUTO_VAL_INIT(null_hash);
+  const static Crypto::Hash null_hash = AUTO_VAL_INIT(null_hash);
   const static Crypto::public_key null_pkey = AUTO_VAL_INIT(null_pkey);
 
   typedef std::vector<Crypto::signature> ring_signature;
@@ -57,7 +57,7 @@ namespace cryptonote
 
   struct txout_to_scripthash
   {
-    Crypto::hash hash;
+    Crypto::Hash hash;
   };
 
   struct txout_to_key
@@ -91,7 +91,7 @@ namespace cryptonote
 
   struct txin_to_script
   {
-    Crypto::hash prev;
+    Crypto::Hash prev;
     size_t prevout;
     std::vector<uint8_t> sigset;
 
@@ -104,7 +104,7 @@ namespace cryptonote
 
   struct txin_to_scripthash
   {
-    Crypto::hash prev;
+    Crypto::Hash prev;
     size_t prevout;
     txout_to_script script;
     std::vector<uint8_t> sigset;
@@ -361,12 +361,12 @@ namespace cryptonote
   {
     uint8_t major_version;
     uint8_t minor_version;
-    Crypto::hash prev_id;
+    Crypto::Hash prev_id;
     uint32_t nonce;
     size_t number_of_transactions;
-    std::vector<Crypto::hash> miner_tx_branch;
+    std::vector<Crypto::Hash> miner_tx_branch;
     transaction miner_tx;
-    std::vector<Crypto::hash> blockchain_branch;
+    std::vector<Crypto::Hash> blockchain_branch;
   };
 
   struct serializable_bytecoin_block
@@ -391,11 +391,11 @@ namespace cryptonote
 
       if (hashing_serialization)
       {
-        Crypto::hash miner_tx_hash;
+        Crypto::Hash miner_tx_hash;
         if (!get_transaction_hash(b.miner_tx, miner_tx_hash))
           return false;
 
-        Crypto::hash merkle_root;
+        Crypto::Hash merkle_root;
         Crypto::tree_hash_from_branch(b.miner_tx_branch.data(), b.miner_tx_branch.size(), miner_tx_hash, 0, merkle_root);
 
         FIELD(merkle_root);
@@ -451,7 +451,7 @@ namespace cryptonote
     uint8_t major_version;
     uint8_t minor_version;
     uint64_t timestamp;
-    Crypto::hash prev_id;
+    Crypto::Hash prev_id;
     uint32_t nonce;
 
     BEGIN_SERIALIZE()
@@ -475,7 +475,7 @@ namespace cryptonote
     bytecoin_block parent_block;
 
     transaction miner_tx;
-    std::vector<Crypto::hash> tx_hashes;
+    std::vector<Crypto::Hash> tx_hashes;
 
     BEGIN_SERIALIZE_OBJECT()
       FIELDS(*static_cast<block_header *>(this))
@@ -501,7 +501,7 @@ namespace cryptonote
     uint8_t major_version;
     uint8_t minor_version;
     uint64_t timestamp;
-    Crypto::hash  prev_id;
+    Crypto::Hash  prev_id;
     uint64_t nonce;
     uint8_t flags;
 
@@ -518,7 +518,7 @@ namespace cryptonote
   struct bb_block: public bb_block_header
   {
     bb_transaction miner_tx;
-    std::vector<Crypto::hash> tx_hashes;
+    std::vector<Crypto::Hash> tx_hashes;
 
     BEGIN_SERIALIZE()
       FIELDS(*static_cast<bb_block_header *>(this))
