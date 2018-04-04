@@ -66,7 +66,7 @@ namespace cryptonote
 
   struct tx_extra_pub_key
   {
-    crypto::public_key pub_key;
+    Crypto::public_key pub_key;
 
     BEGIN_SERIALIZE()
       FIELD(pub_key)
@@ -100,7 +100,7 @@ namespace cryptonote
     };
 
     size_t depth;
-    crypto::hash merkle_root;
+    Crypto::hash merkle_root;
 
     // load
     template <template <bool> class Archive>
@@ -141,4 +141,4 @@ namespace cryptonote
 VARIANT_TAG(binary_archive, cryptonote::tx_extra_padding, TX_EXTRA_TAG_PADDING);
 VARIANT_TAG(binary_archive, cryptonote::tx_extra_pub_key, TX_EXTRA_TAG_PUBKEY);
 VARIANT_TAG(binary_archive, cryptonote::tx_extra_nonce, TX_EXTRA_NONCE);
-VARIANT_TAG(binary_archive, cryptonote::tx_extra_merge_mining_tag, TX_EXTRA_MERGE_MINING_TAG);
+VARIANT_TAG(binary_archive, cryptonote::tx_extra_merge_mining_tag, TX_EXTRA_MERGE_MINING_TAG); 
