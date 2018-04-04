@@ -118,7 +118,7 @@ namespace cryptonote {
         return false;
       }
 
-      if (!crypto::check_key(adr.m_spend_public_key) || !crypto::check_key(adr.m_view_public_key))
+      if (!Crypto::check_key(adr.m_spend_public_key) || !Crypto::check_key(adr.m_view_public_key))
       {
         LOG_PRINT_L1("Failed to validate address keys");
         return false;
@@ -169,18 +169,18 @@ namespace cryptonote {
 }
 
 //--------------------------------------------------------------------------------
-bool parse_hash256(const std::string str_hash, crypto::hash& hash)
+bool parse_hash256(const std::string str_hash, Crypto::hash& hash)
 {
   std::string buf;
   bool res = epee::string_tools::parse_hexstr_to_binbuff(str_hash, buf);
-  if (!res || buf.size() != sizeof(crypto::hash))
+  if (!res || buf.size() != sizeof(Crypto::hash))
   {
     std::cout << "invalid hash format: <" << str_hash << '>' << std::endl;
     return false;
   }
   else
   {
-    buf.copy(reinterpret_cast<char *>(&hash), sizeof(crypto::hash));
+    buf.copy(reinterpret_cast<char *>(&hash), sizeof(Crypto::hash));
     return true;
   }
-}
+} 
