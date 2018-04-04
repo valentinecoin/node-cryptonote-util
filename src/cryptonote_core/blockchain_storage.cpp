@@ -1179,7 +1179,7 @@ size_t blockchain_storage::get_total_transactions()
   return m_transactions.size();
 }
 //------------------------------------------------------------------
-bool blockchain_storage::get_outs(uint64_t amount, std::list<Crypto::public_key>& pkeys)
+bool blockchain_storage::get_outs(uint64_t amount, std::list<Crypto::PublicKey>& pkeys)
 {
   CRITICAL_REGION_LOCAL(m_blockchain_lock);
   auto it = m_outputs.find(amount);
@@ -1364,15 +1364,15 @@ bool blockchain_storage::is_tx_spendtime_unlocked(uint64_t unlock_time)
   return false;
 }
 //------------------------------------------------------------------
-bool blockchain_storage::check_tx_input(const txin_to_key& txin, const Crypto::Hash& tx_prefix_hash, const std::vector<Crypto::signature>& sig, uint64_t* pmax_related_block_height)
+bool blockchain_storage::check_tx_input(const txin_to_key& txin, const Crypto::Hash& tx_prefix_hash, const std::vector<Crypto::Signature>& sig, uint64_t* pmax_related_block_height)
 {
   CRITICAL_REGION_LOCAL(m_blockchain_lock);
 
   struct outputs_visitor
   {
-    std::vector<const Crypto::public_key *>& m_results_collector;
+    std::vector<const Crypto::PublicKey *>& m_results_collector;
     blockchain_storage& m_bch;
-    outputs_visitor(std::vector<const Crypto::public_key *>& results_collector, blockchain_storage& bch):m_results_collector(results_collector), m_bch(bch)
+    outputs_visitor(std::vector<const Crypto::PublicKey *>& results_collector, blockchain_storage& bch):m_results_collector(results_collector), m_bch(bch)
     {}
     bool handle_output(const transaction& tx, const tx_out& out)
     {
@@ -1395,7 +1395,7 @@ bool blockchain_storage::check_tx_input(const txin_to_key& txin, const Crypto::H
   };
 
   //check ring signature
-  std::vector<const Crypto::public_key *> output_keys;
+  std::vector<const Crypto::PublicKey *> output_keys;
   outputs_visitor vi(output_keys, *this);
   if(!scan_outputkeys_for_indexes(txin, vi, pmax_related_block_height))
   {
