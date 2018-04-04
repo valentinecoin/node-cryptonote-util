@@ -14,8 +14,8 @@ namespace cryptonote
   struct account_keys
   {
     account_public_address m_account_address;
-    Crypto::secret_key   m_spend_secret_key;
-    Crypto::secret_key   m_view_secret_key;
+    Crypto::SecretKey   m_spend_secret_key;
+    Crypto::SecretKey   m_view_secret_key;
 
     BEGIN_KV_SERIALIZE_MAP()
       KV_SERIALIZE(m_account_address)
