@@ -28,7 +28,7 @@ namespace cryptonote
 
   }
   //---------------------------------------------------------------------------------
-  bool tx_memory_pool::add_tx(const transaction &tx, /*const Crypto::hash& tx_prefix_hash,*/ const Crypto::hash &id, size_t blob_size, tx_verification_context& tvc, bool kept_by_block)
+  bool tx_memory_pool::add_tx(const transaction &tx, /*const Crypto::Hash& tx_prefix_hash,*/ const Crypto::Hash &id, size_t blob_size, tx_verification_context& tvc, bool kept_by_block)
   {
 
 
@@ -66,7 +66,7 @@ namespace cryptonote
     }
 
 
-    Crypto::hash max_used_block_id = null_hash;
+    Crypto::Hash max_used_block_id = null_hash;
     uint64_t max_used_block_height = 0;
     bool ch_inp_res = m_blockchain.check_tx_inputs(tx, max_used_block_height, max_used_block_id);
     CRITICAL_REGION_LOCAL(m_transactions_lock);
@@ -115,7 +115,7 @@ namespace cryptonote
     BOOST_FOREACH(const auto& in, tx.vin)
     {
       CHECKED_GET_SPECIFIC_VARIANT(in, const txin_to_key, txin, false);
-      std::unordered_set<Crypto::hash>& kei_image_set = m_spent_key_images[txin.k_image];
+      std::unordered_set<Crypto::Hash>& kei_image_set = m_spent_key_images[txin.k_image];
       CHECK_AND_ASSERT_MES(kept_by_block || kei_image_set.size() == 0, false, "internal error: keeped_by_block=" << kept_by_block
                                           << ",  kei_image_set.size()=" << kei_image_set.size() << ENDL << "txin.k_image=" << txin.k_image << ENDL
                                           << "tx_id=" << id );
@@ -130,7 +130,7 @@ namespace cryptonote
   //---------------------------------------------------------------------------------
   bool tx_memory_pool::add_tx(const transaction &tx, tx_verification_context& tvc, bool keeped_by_block)
   {
-    Crypto::hash h = null_hash;
+    Crypto::Hash h = null_hash;
     size_t blob_size = 0;
     get_transaction_hash(tx, h, blob_size);
     return add_tx(tx, h, blob_size, tvc, keeped_by_block);
@@ -145,7 +145,7 @@ namespace cryptonote
       auto it = m_spent_key_images.find(txin.k_image);
       CHECK_AND_ASSERT_MES(it != m_spent_key_images.end(), false, "failed to find transaction input in key images. img=" << txin.k_image << ENDL
                                     << "transaction id = " << get_transaction_hash(tx));
-      std::unordered_set<Crypto::hash>& key_image_set =  it->second;
+      std::unordered_set<Crypto::Hash>& key_image_set =  it->second;
       CHECK_AND_ASSERT_MES(key_image_set.size(), false, "empty key_image set, img=" << txin.k_image << ENDL
         << "transaction id = " << get_transaction_hash(tx));
 
@@ -163,7 +163,7 @@ namespace cryptonote
     return true;
   }
   //---------------------------------------------------------------------------------
-  bool tx_memory_pool::take_tx(const Crypto::hash &id, transaction &tx, size_t& blob_size, uint64_t& fee)
+  bool tx_memory_pool::take_tx(const Crypto::Hash &id, transaction &tx, size_t& blob_size, uint64_t& fee)
   {
     CRITICAL_REGION_LOCAL(m_transactions_lock);
     auto it = m_transactions.find(id);
@@ -193,7 +193,7 @@ namespace cryptonote
     return true;
   }
   //---------------------------------------------------------------------------------
-  bool tx_memory_pool::get_transaction(const Crypto::hash& id, transaction& tx)
+  bool tx_memory_pool::get_transaction(const Crypto::Hash& id, transaction& tx)
   {
     CRITICAL_REGION_LOCAL(m_transactions_lock);
     auto it = m_transactions.find(id);
@@ -203,17 +203,17 @@ namespace cryptonote
     return true;
   }
   //---------------------------------------------------------------------------------
-  bool tx_memory_pool::on_blockchain_inc(uint64_t new_block_height, const Crypto::hash& top_block_id)
+  bool tx_memory_pool::on_blockchain_inc(uint64_t new_block_height, const Crypto::Hash& top_block_id)
   {
     return true;
   }
   //---------------------------------------------------------------------------------
-  bool tx_memory_pool::on_blockchain_dec(uint64_t new_block_height, const Crypto::hash& top_block_id)
+  bool tx_memory_pool::on_blockchain_dec(uint64_t new_block_height, const Crypto::Hash& top_block_id)
   {
     return true;
   }
   //---------------------------------------------------------------------------------
-  bool tx_memory_pool::have_tx(const Crypto::hash &id)
+  bool tx_memory_pool::have_tx(const Crypto::Hash &id)
   {
     CRITICAL_REGION_LOCAL(m_transactions_lock);
     if(m_transactions.count(id))
