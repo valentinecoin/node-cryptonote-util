@@ -121,7 +121,7 @@ namespace cryptonote
   {
     uint64_t amount;
     std::vector<uint64_t> key_offsets;
-    Crypto::key_image k_image;      // double spending protection
+    Crypto::KeyImage k_image;      // double spending protection
 
     BEGIN_SERIALIZE_OBJECT()
       VARINT_FIELD(amount)
