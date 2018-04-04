@@ -1,3 +1,4 @@
+
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
 //
 // This file is part of Bytecoin.
@@ -20,6 +21,7 @@
 #include <stddef.h>
 
 #include "../../include/CryptoTypes.h"
+#include "common/pod-class.h"
 #include "generic-ops.h"
 
 namespace Crypto {
