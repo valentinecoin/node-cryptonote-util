@@ -16,7 +16,7 @@ namespace cryptonote
   //---------------------------------------------------------------------------
   bool checkpoints::add_checkpoint(uint64_t height, const std::string& hash_str)
   {
-    Crypto::hash h = null_hash;
+    Crypto::Hash h = null_hash;
     bool r = epee::string_tools::parse_tpod_from_hex_string(hash_str, h);
     CHECK_AND_ASSERT_MES(r, false, "WRONG HASH IN CHECKPOINTS!!!");
     CHECK_AND_ASSERT_MES(0 == m_points.count(height), false, "WRONG HASH IN CHECKPOINTS!!!");
@@ -29,7 +29,7 @@ namespace cryptonote
     return !m_points.empty() && (height <= (--m_points.end())->first);
   }
   //---------------------------------------------------------------------------
-  bool checkpoints::check_block(uint64_t height, const Crypto::hash& h) const
+  bool checkpoints::check_block(uint64_t height, const Crypto::Hash& h) const
   {
     auto it = m_points.find(height);
     if(it == m_points.end())
