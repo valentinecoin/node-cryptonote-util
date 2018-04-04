@@ -15,8 +15,8 @@ namespace cryptonote
     checkpoints();
     bool add_checkpoint(uint64_t height, const std::string& hash_str);
     bool is_in_checkpoint_zone(uint64_t height) const;
-    bool check_block(uint64_t height, const Crypto::hash& h) const;
+    bool check_block(uint64_t height, const Crypto::Hash& h) const;
   private:
-    std::map<uint64_t, Crypto::hash> m_points;
+    std::map<uint64_t, Crypto::Hash> m_points;
   };
 } 
