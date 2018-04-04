@@ -736,7 +736,8 @@ namespace cryptonote
 		blobdata bd;
 		if (!get_block_hashing_blob(b, bd))
 			return false;
-		Crypto::cn_slow_hash(bd.data(), bd.size(), res, 1);
+		Crypto::cn_context cryptoContext;
+		Crypto::cn_slow_hash(cryptoContext,bd.data(), bd.size(), res, 1);
 		return true;
 	}
 	//---------------------------------------------------------------
