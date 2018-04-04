@@ -126,7 +126,7 @@ namespace cryptonote
 	//---------------------------------------------------------------
 	bool generate_key_image_helper(const account_keys& ack, const Crypto::PublicKey& tx_public_key, size_t real_output_index, keypair& in_ephemeral, Crypto::KeyImage& ki)
 	{
-		Crypto::key_derivation recv_derivation = AUTO_VAL_INIT(recv_derivation);
+		Crypto::PublicKey recv_derivation = AUTO_VAL_INIT(recv_derivation);
 		bool r = Crypto::generate_key_derivation(tx_public_key, ack.m_view_secret_key, recv_derivation);
 		CHECK_AND_ASSERT_MES(r, false, "key image helper: failed to generate_key_derivation(" << tx_public_key << ", " << ack.m_view_secret_key << ")");
 
@@ -538,7 +538,7 @@ namespace cryptonote
 	//---------------------------------------------------------------
 	bool is_out_to_acc(const account_keys& acc, const txout_to_key& out_key, const Crypto::PublicKey& tx_pub_key, size_t output_index)
 	{
-		Crypto::key_derivation derivation;
+		Crypto::PublicKey derivation;
 		generate_key_derivation(tx_pub_key, acc.m_view_secret_key, derivation);
 		Crypto::PublicKey pk;
 		derive_public_key(derivation, output_index, acc.m_account_address.m_spend_public_key, pk);
