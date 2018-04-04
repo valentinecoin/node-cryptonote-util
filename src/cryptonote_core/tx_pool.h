@@ -37,7 +37,7 @@ namespace cryptonote
     bool take_tx(const Crypto::Hash &id, transaction &tx, size_t& blob_size, uint64_t& fee);
 
     bool have_tx(const Crypto::Hash &id);
-    bool have_tx_keyimg_as_spent(const Crypto::key_image& key_im);
+    bool have_tx_keyimg_as_spent(const Crypto::KeyImage& key_im);
     bool have_tx_keyimges_as_spent(const transaction& tx);
 
     bool on_blockchain_inc(uint64_t new_block_height, const Crypto::Hash& top_block_id);
@@ -54,8 +54,8 @@ namespace cryptonote
     bool get_transaction(const Crypto::Hash& h, transaction& tx);
     size_t get_transactions_count();
     bool remove_transaction_keyimages(const transaction& tx);
-    bool have_key_images(const std::unordered_set<Crypto::key_image>& kic, const transaction& tx);
-    bool append_key_images(std::unordered_set<Crypto::key_image>& kic, const transaction& tx);
+    bool have_key_images(const std::unordered_set<Crypto::KeyImage>& kic, const transaction& tx);
+    bool append_key_images(std::unordered_set<Crypto::KeyImage>& kic, const transaction& tx);
     std::string print_pool(bool short_format);
 
     /*bool flush_pool(const std::strig& folder);
@@ -89,7 +89,7 @@ namespace cryptonote
   private:
     bool is_transaction_ready_to_go(tx_details& txd);
     typedef std::unordered_map<Crypto::Hash, tx_details > transactions_container;
-    typedef std::unordered_map<Crypto::key_image, std::unordered_set<Crypto::Hash> > key_images_container;
+    typedef std::unordered_map<Crypto::KeyImage, std::unordered_set<Crypto::Hash> > key_images_container;
 
     epee::critical_section m_transactions_lock;
     transactions_container m_transactions;
