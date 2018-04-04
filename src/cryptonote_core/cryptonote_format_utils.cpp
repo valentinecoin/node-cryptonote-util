@@ -466,8 +466,8 @@ namespace cryptonote
 		BOOST_FOREACH(const auto& in, tx.vin)
 		{
 //			CHECK_AND_ASSERT_MES(in.type() == typeid(txin_to_key), false, "wrong variant type: "
-				<< in.type().name() << ", expected " << typeid(txin_to_key).name()
-				<< ", in transaction id=" << get_transaction_hash(tx));
+//				<< in.type().name() << ", expected " << typeid(txin_to_key).name()
+//				<< ", in transaction id=" << get_transaction_hash(tx));
 
 		}
 		return true;
@@ -478,8 +478,8 @@ namespace cryptonote
 		BOOST_FOREACH(const tx_out& out, tx.vout)
 		{
 //			CHECK_AND_ASSERT_MES(out.target.type() == typeid(txout_to_key), false, "wrong variant type: "
-				<< out.target.type().name() << ", expected " << typeid(txout_to_key).name()
-				<< ", in transaction id=" << get_transaction_hash(tx));
+//				<< out.target.type().name() << ", expected " << typeid(txout_to_key).name()
+//				<< ", in transaction id=" << get_transaction_hash(tx));
 
 //			CHECK_AND_NO_ASSERT_MES(0 < out.amount, false, "zero amount ouput in transaction id=" << get_transaction_hash(tx));
 
@@ -862,7 +862,7 @@ namespace cryptonote
 	//---------------------------------------------------------------
 	bool check_proof_of_work_v2(const block& bl, difficulty_type current_diffic, Crypto::Hash& proof_of_work)
 	{
-		if (BLOCK_MAJOR_VERSION_2 != bl.major_version || BLOCK_MAJOR_VERSION_3 != bl.major_version)
+		if (bl.major_version < BLOCK_MAJOR_VERSION_2)
 			return false;
 
 		if (!get_bytecoin_block_longhash(bl, proof_of_work))
@@ -903,6 +903,7 @@ namespace cryptonote
 		case BLOCK_MAJOR_VERSION_1: return check_proof_of_work_v1(bl, current_diffic, proof_of_work);
 		case BLOCK_MAJOR_VERSION_2: return check_proof_of_work_v2(bl, current_diffic, proof_of_work);
 		case BLOCK_MAJOR_VERSION_3: return check_proof_of_work_v2(bl, current_diffic, proof_of_work);
+		case BLOCK_MAJOR_VERSION_7: return check_proof_of_work_v2(bl, current_diffic, proof_of_work);
 		}
 
 //		CHECK_AND_ASSERT_MES(false, false, "unknown block major version: " << bl.major_version << "." << bl.minor_version);
