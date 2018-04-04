@@ -17,7 +17,7 @@
 
 #pragma once
 
-#include <cstdint>
+//#include <cstdint>
 
 namespace Crypto {
 
