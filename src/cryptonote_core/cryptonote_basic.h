@@ -33,20 +33,20 @@ namespace cryptonote
   struct tx_extra_merge_mining_tag;
 
   // Implemented in cryptonote_format_utils.cpp
-  bool get_transaction_hash(const transaction& t, crypto::hash& res);
+  bool get_transaction_hash(const transaction& t, Crypto::hash& res);
   bool get_mm_tag_from_extra(const std::vector<uint8_t>& tx, tx_extra_merge_mining_tag& mm_tag);
 
-  const static crypto::hash null_hash = AUTO_VAL_INIT(null_hash);
-  const static crypto::public_key null_pkey = AUTO_VAL_INIT(null_pkey);
+  const static Crypto::hash null_hash = AUTO_VAL_INIT(null_hash);
+  const static Crypto::public_key null_pkey = AUTO_VAL_INIT(null_pkey);
 
-  typedef std::vector<crypto::signature> ring_signature;
+  typedef std::vector<Crypto::signature> ring_signature;
 
 
   /* outputs */
 
   struct txout_to_script
   {
-    std::vector<crypto::public_key> keys;
+    std::vector<Crypto::public_key> keys;
     std::vector<uint8_t> script;
 
     BEGIN_SERIALIZE_OBJECT()
@@ -57,22 +57,22 @@ namespace cryptonote
 
   struct txout_to_scripthash
   {
-    crypto::hash hash;
+    Crypto::hash hash;
   };
 
   struct txout_to_key
   {
     txout_to_key() { }
-    txout_to_key(const crypto::public_key &_key) : key(_key) { }
-    crypto::public_key key;
+    txout_to_key(const Crypto::public_key &_key) : key(_key) { }
+    Crypto::public_key key;
   };
 
   #pragma pack(push, 1)
   struct bb_txout_to_key
   {
     bb_txout_to_key() { }
-    bb_txout_to_key(const crypto::public_key &_key) : key(_key) { }
-    crypto::public_key key;
+    bb_txout_to_key(const Crypto::public_key &_key) : key(_key) { }
+    Crypto::public_key key;
     uint8_t mix_attr;
   };
   #pragma pack(pop)
@@ -91,7 +91,7 @@ namespace cryptonote
 
   struct txin_to_script
   {
-    crypto::hash prev;
+    Crypto::hash prev;
     size_t prevout;
     std::vector<uint8_t> sigset;
 
@@ -104,7 +104,7 @@ namespace cryptonote
 
   struct txin_to_scripthash
   {
-    crypto::hash prev;
+    Crypto::hash prev;
     size_t prevout;
     txout_to_script script;
     std::vector<uint8_t> sigset;
@@ -121,7 +121,7 @@ namespace cryptonote
   {
     uint64_t amount;
     std::vector<uint64_t> key_offsets;
-    crypto::key_image k_image;      // double spending protection
+    Crypto::key_image k_image;      // double spending protection
 
     BEGIN_SERIALIZE_OBJECT()
       VARINT_FIELD(amount)
@@ -188,7 +188,7 @@ namespace cryptonote
   class transaction: public transaction_prefix
   {
   public:
-    std::vector<std::vector<crypto::signature> > signatures; //count signatures  always the same as inputs count
+    std::vector<std::vector<Crypto::signature> > signatures; //count signatures  always the same as inputs count
 
     transaction();
     virtual ~transaction();
@@ -260,7 +260,7 @@ namespace cryptonote
   class bb_transaction: public bb_transaction_prefix
   {
   public:
-    std::vector<std::vector<crypto::signature> > signatures; //count signatures  always the same as inputs count
+    std::vector<std::vector<Crypto::signature> > signatures; //count signatures  always the same as inputs count
 
     bb_transaction();
     virtual ~bb_transaction();
@@ -361,12 +361,12 @@ namespace cryptonote
   {
     uint8_t major_version;
     uint8_t minor_version;
-    crypto::hash prev_id;
+    Crypto::hash prev_id;
     uint32_t nonce;
     size_t number_of_transactions;
-    std::vector<crypto::hash> miner_tx_branch;
+    std::vector<Crypto::hash> miner_tx_branch;
     transaction miner_tx;
-    std::vector<crypto::hash> blockchain_branch;
+    std::vector<Crypto::hash> blockchain_branch;
   };
 
   struct serializable_bytecoin_block
@@ -391,12 +391,12 @@ namespace cryptonote
 
       if (hashing_serialization)
       {
-        crypto::hash miner_tx_hash;
+        Crypto::hash miner_tx_hash;
         if (!get_transaction_hash(b.miner_tx, miner_tx_hash))
           return false;
 
-        crypto::hash merkle_root;
-        crypto::tree_hash_from_branch(b.miner_tx_branch.data(), b.miner_tx_branch.size(), miner_tx_hash, 0, merkle_root);
+        Crypto::hash merkle_root;
+        Crypto::tree_hash_from_branch(b.miner_tx_branch.data(), b.miner_tx_branch.size(), miner_tx_hash, 0, merkle_root);
 
         FIELD(merkle_root);
       }
@@ -409,7 +409,7 @@ namespace cryptonote
       {
         ar.tag("miner_tx_branch");
         ar.begin_array();
-        size_t branch_size = crypto::tree_depth(b.number_of_transactions);
+        size_t branch_size = Crypto::tree_depth(b.number_of_transactions);
         PREPARE_CUSTOM_VECTOR_SERIALIZATION(branch_size, const_cast<bytecoin_block&>(b).miner_tx_branch);
         if (b.miner_tx_branch.size() != branch_size)
           return false;
@@ -451,7 +451,7 @@ namespace cryptonote
     uint8_t major_version;
     uint8_t minor_version;
     uint64_t timestamp;
-    crypto::hash prev_id;
+    Crypto::hash prev_id;
     uint32_t nonce;
 
     BEGIN_SERIALIZE()
@@ -475,7 +475,7 @@ namespace cryptonote
     bytecoin_block parent_block;
 
     transaction miner_tx;
-    std::vector<crypto::hash> tx_hashes;
+    std::vector<Crypto::hash> tx_hashes;
 
     BEGIN_SERIALIZE_OBJECT()
       FIELDS(*static_cast<block_header *>(this))
@@ -501,7 +501,7 @@ namespace cryptonote
     uint8_t major_version;
     uint8_t minor_version;
     uint64_t timestamp;
-    crypto::hash  prev_id;
+    Crypto::hash  prev_id;
     uint64_t nonce;
     uint8_t flags;
 
@@ -518,7 +518,7 @@ namespace cryptonote
   struct bb_block: public bb_block_header
   {
     bb_transaction miner_tx;
-    std::vector<crypto::hash> tx_hashes;
+    std::vector<Crypto::hash> tx_hashes;
 
     BEGIN_SERIALIZE()
       FIELDS(*static_cast<bb_block_header *>(this))
@@ -533,8 +533,8 @@ namespace cryptonote
   /************************************************************************/
   struct account_public_address
   {
-    crypto::public_key m_spend_public_key;
-    crypto::public_key m_view_public_key;
+    Crypto::public_key m_spend_public_key;
+    Crypto::public_key m_view_public_key;
 
     BEGIN_SERIALIZE_OBJECT()
       FIELD(m_spend_public_key)
@@ -549,8 +549,8 @@ namespace cryptonote
 
   struct keypair
   {
-    crypto::public_key pub;
-    crypto::secret_key sec;
+    Crypto::public_key pub;
+    Crypto::secret_key sec;
 
     static inline keypair generate()
     {
@@ -598,4 +598,4 @@ VARIANT_TAG(debug_archive, cryptonote::txout_to_scripthash, "scripthash");
 VARIANT_TAG(debug_archive, cryptonote::txout_to_key, "key");
 VARIANT_TAG(debug_archive, cryptonote::bb_txout_to_key, "key");
 VARIANT_TAG(debug_archive, cryptonote::transaction, "tx");
-VARIANT_TAG(debug_archive, cryptonote::block, "block");
+VARIANT_TAG(debug_archive, cryptonote::block, "block"); 
