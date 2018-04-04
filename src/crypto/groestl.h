@@ -57,4 +57,4 @@ int crypto_hash(unsigned char *out,
 		unsigned long long len);
 */
 
-#endif /* __hash_h */
+#endif /* __hash_h */ 
