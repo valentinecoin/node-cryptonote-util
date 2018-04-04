@@ -538,7 +538,7 @@ namespace cryptonote
 	//---------------------------------------------------------------
 	bool is_out_to_acc(const account_keys& acc, const txout_to_key& out_key, const Crypto::PublicKey& tx_pub_key, size_t output_index)
 	{
-		Crypto::PublicKey derivation;
+		Crypto::KeyDerivation derivation;
 		generate_key_derivation(tx_pub_key, acc.m_view_secret_key, derivation);
 		Crypto::PublicKey pk;
 		derive_public_key(derivation, output_index, acc.m_account_address.m_spend_public_key, pk);
