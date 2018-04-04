@@ -47,7 +47,7 @@ namespace cryptonote
      bool set_genesis_block(const block& b);
      bool deinit();
      uint64_t get_current_blockchain_height();
-     bool get_blockchain_top(uint64_t& heeight, crypto::hash& top_id);
+     bool get_blockchain_top(uint64_t& heeight, Crypto::hash& top_id);
      bool get_blocks(uint64_t start_offset, size_t count, std::list<block>& blocks, std::list<transaction>& txs);
      bool get_blocks(uint64_t start_offset, size_t count, std::list<block>& blocks);
      template<class t_ids_container, class t_blocks_container, class t_missed_container>
@@ -55,11 +55,11 @@ namespace cryptonote
      {
        return m_blockchain_storage.get_blocks(block_ids, blocks, missed_bs);
      }
-     crypto::hash get_block_id_by_height(uint64_t height);
-     bool get_transactions(const std::vector<crypto::hash>& txs_ids, std::list<transaction>& txs, std::list<crypto::hash>& missed_txs);
-     bool get_transaction(const crypto::hash &h, transaction &tx);
-     bool get_block_by_hash(const crypto::hash &h, block &blk);
-     void get_all_known_block_ids(std::list<crypto::hash> &main, std::list<crypto::hash> &alt, std::list<crypto::hash> &invalid);
+     Crypto::hash get_block_id_by_height(uint64_t height);
+     bool get_transactions(const std::vector<Crypto::hash>& txs_ids, std::list<transaction>& txs, std::list<Crypto::hash>& missed_txs);
+     bool get_transaction(const Crypto::hash &h, transaction &tx);
+     bool get_block_by_hash(const Crypto::hash &h, block &blk);
+     void get_all_known_block_ids(std::list<Crypto::hash> &main, std::list<Crypto::hash> &alt, std::list<Crypto::hash> &invalid);
 
      bool get_alternative_blocks(std::list<block>& blocks);
      size_t get_alternative_blocks_count();
@@ -70,15 +70,15 @@ namespace cryptonote
      bool get_pool_transactions(std::list<transaction>& txs);
      size_t get_pool_transactions_count();
      size_t get_blockchain_total_transactions();
-     bool get_outs(uint64_t amount, std::list<crypto::public_key>& pkeys);
-     bool have_block(const crypto::hash& id);
-     bool get_short_chain_history(std::list<crypto::hash>& ids);
-     bool find_blockchain_supplement(const std::list<crypto::hash>& qblock_ids, NOTIFY_RESPONSE_CHAIN_ENTRY::request& resp);
-     bool find_blockchain_supplement(const std::list<crypto::hash>& qblock_ids, std::list<std::pair<block, std::list<transaction> > >& blocks, uint64_t& total_height, uint64_t& start_height, size_t max_count);
+     bool get_outs(uint64_t amount, std::list<Crypto::public_key>& pkeys);
+     bool have_block(const Crypto::hash& id);
+     bool get_short_chain_history(std::list<Crypto::hash>& ids);
+     bool find_blockchain_supplement(const std::list<Crypto::hash>& qblock_ids, NOTIFY_RESPONSE_CHAIN_ENTRY::request& resp);
+     bool find_blockchain_supplement(const std::list<Crypto::hash>& qblock_ids, std::list<std::pair<block, std::list<transaction> > >& blocks, uint64_t& total_height, uint64_t& start_height, size_t max_count);
      bool get_stat_info(core_stat_info& st_inf);
      bool get_backward_blocks_sizes(uint64_t from_height, std::vector<size_t>& sizes, size_t count);
-     bool get_tx_outputs_gindexs(const crypto::hash& tx_id, std::vector<uint64_t>& indexs);
-     crypto::hash get_tail_id();
+     bool get_tx_outputs_gindexs(const Crypto::hash& tx_id, std::vector<uint64_t>& indexs);
+     Crypto::hash get_tail_id();
      bool get_random_outs_for_amounts(const COMMAND_RPC_GET_RANDOM_OUTPUTS_FOR_AMOUNTS::request& req, COMMAND_RPC_GET_RANDOM_OUTPUTS_FOR_AMOUNTS::response& res);
      void pause_mine();
      void resume_mine();
@@ -91,20 +91,20 @@ namespace cryptonote
      void on_synchronized();
 
    private:
-     bool add_new_tx(const transaction& tx, const crypto::hash& tx_hash, const crypto::hash& tx_prefix_hash, size_t blob_size, tx_verification_context& tvc, bool keeped_by_block);
+     bool add_new_tx(const transaction& tx, const Crypto::hash& tx_hash, const Crypto::hash& tx_prefix_hash, size_t blob_size, tx_verification_context& tvc, bool keeped_by_block);
      bool add_new_tx(const transaction& tx, tx_verification_context& tvc, bool keeped_by_block);
      bool add_new_block(const block& b, block_verification_context& bvc);
      bool load_state_data();
-     bool parse_tx_from_blob(transaction& tx, crypto::hash& tx_hash, crypto::hash& tx_prefix_hash, const blobdata& blob);
+     bool parse_tx_from_blob(transaction& tx, Crypto::hash& tx_hash, Crypto::hash& tx_prefix_hash, const blobdata& blob);
 
      bool check_tx_syntax(const transaction& tx);
      //check correct values, amounts and all lightweight checks not related with database
      bool check_tx_semantic(const transaction& tx, bool keeped_by_block);
      //check if tx already in memory pool or in main blockchain
 
-     bool is_key_image_spent(const crypto::key_image& key_im);
+     bool is_key_image_spent(const Crypto::key_image& key_im);
 
-     bool check_tx_ring_signature(const txin_to_key& tx, const crypto::hash& tx_prefix_hash, const std::vector<crypto::signature>& sig);
+     bool check_tx_ring_signature(const txin_to_key& tx, const Crypto::hash& tx_prefix_hash, const std::vector<Crypto::signature>& sig);
      bool is_tx_spendtime_unlocked(uint64_t unlock_time);
      bool update_miner_block_template();
      bool handle_command_line(const boost::program_options::variables_map& vm);
@@ -127,4 +127,4 @@ namespace cryptonote
    };
 }
 
-POP_WARNINGS
+POP_WARNINGS 
