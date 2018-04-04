@@ -23,35 +23,35 @@ namespace boost
 
   //---------------------------------------------------
   template <class Archive>
-  inline void serialize(Archive &a, crypto::public_key &x, const boost::serialization::version_type ver)
+  inline void serialize(Archive &a, Crypto::public_key &x, const boost::serialization::version_type ver)
   {
-    a & reinterpret_cast<char (&)[sizeof(crypto::public_key)]>(x);
+    a & reinterpret_cast<char (&)[sizeof(Crypto::public_key)]>(x);
   }
   template <class Archive>
-  inline void serialize(Archive &a, crypto::secret_key &x, const boost::serialization::version_type ver)
+  inline void serialize(Archive &a, Crypto::secret_key &x, const boost::serialization::version_type ver)
   {
-    a & reinterpret_cast<char (&)[sizeof(crypto::secret_key)]>(x);
+    a & reinterpret_cast<char (&)[sizeof(Crypto::secret_key)]>(x);
   }
   template <class Archive>
-  inline void serialize(Archive &a, crypto::key_derivation &x, const boost::serialization::version_type ver)
+  inline void serialize(Archive &a, Crypto::key_derivation &x, const boost::serialization::version_type ver)
   {
-    a & reinterpret_cast<char (&)[sizeof(crypto::key_derivation)]>(x);
+    a & reinterpret_cast<char (&)[sizeof(Crypto::key_derivation)]>(x);
   }
   template <class Archive>
-  inline void serialize(Archive &a, crypto::key_image &x, const boost::serialization::version_type ver)
+  inline void serialize(Archive &a, Crypto::key_image &x, const boost::serialization::version_type ver)
   {
-    a & reinterpret_cast<char (&)[sizeof(crypto::key_image)]>(x);
+    a & reinterpret_cast<char (&)[sizeof(Crypto::key_image)]>(x);
   }
 
   template <class Archive>
-  inline void serialize(Archive &a, crypto::signature &x, const boost::serialization::version_type ver)
+  inline void serialize(Archive &a, Crypto::signature &x, const boost::serialization::version_type ver)
   {
-    a & reinterpret_cast<char (&)[sizeof(crypto::signature)]>(x);
+    a & reinterpret_cast<char (&)[sizeof(Crypto::signature)]>(x);
   }
   template <class Archive>
-  inline void serialize(Archive &a, crypto::hash &x, const boost::serialization::version_type ver)
+  inline void serialize(Archive &a, Crypto::hash &x, const boost::serialization::version_type ver)
   {
-    a & reinterpret_cast<char (&)[sizeof(crypto::hash)]>(x);
+    a & reinterpret_cast<char (&)[sizeof(Crypto::hash)]>(x);
   }
 
   template <class Archive>
@@ -147,4 +147,4 @@ namespace boost
 }
 }
 
-//}
+//} 
