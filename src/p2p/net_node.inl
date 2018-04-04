@@ -778,7 +778,7 @@ namespace nodetool
       LOG_ERROR("check_trust failed: peer_id mismatch (passed " << tr.peer_id << ", expected " << m_config.m_peer_id<< ")");
       return false;
     }
-    Crypto::public_key pk = AUTO_VAL_INIT(pk);
+    Crypto::PublicKey pk = AUTO_VAL_INIT(pk);
     string_tools::hex_to_pod(P2P_STAT_TRUSTED_PUB_KEY, pk);
     Crypto::Hash h = tools::get_proof_of_trust_hash(tr);
     if(!Crypto::check_signature(h, pk, tr.sign))
