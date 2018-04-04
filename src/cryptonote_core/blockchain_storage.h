@@ -88,7 +88,7 @@ namespace cryptonote
     bool create_block_template(block& b, const account_public_address& miner_address, difficulty_type& di, uint64_t& height, const blobdata& ex_nonce);
     bool have_block(const Crypto::Hash& id);
     size_t get_total_transactions();
-    bool get_outs(uint64_t amount, std::list<Crypto::public_key>& pkeys);
+    bool get_outs(uint64_t amount, std::list<Crypto::PublicKey>& pkeys);
     bool get_short_chain_history(std::list<Crypto::Hash>& ids);
     bool find_blockchain_supplement(const std::list<Crypto::Hash>& qblock_ids, NOTIFY_RESPONSE_CHAIN_ENTRY::request& resp);
     bool find_blockchain_supplement(const std::list<Crypto::Hash>& qblock_ids, uint64_t& starter_offset);
@@ -99,7 +99,7 @@ namespace cryptonote
     bool get_backward_blocks_sizes(size_t from_height, std::vector<size_t>& sz, size_t count);
     bool get_tx_outputs_gindexs(const Crypto::Hash& tx_id, std::vector<uint64_t>& indexs);
     bool store_blockchain();
-    bool check_tx_input(const txin_to_key& txin, const Crypto::Hash& tx_prefix_hash, const std::vector<Crypto::signature>& sig, uint64_t* pmax_related_block_height = NULL);
+    bool check_tx_input(const txin_to_key& txin, const Crypto::Hash& tx_prefix_hash, const std::vector<Crypto::Signature>& sig, uint64_t* pmax_related_block_height = NULL);
     bool check_tx_inputs(const transaction& tx, const Crypto::Hash& tx_prefix_hash, uint64_t* pmax_used_block_height = NULL);
     bool check_tx_inputs(const transaction& tx, uint64_t* pmax_used_block_height = NULL);
     bool check_tx_inputs(const transaction& tx, uint64_t& pmax_used_block_height, Crypto::Hash& max_used_block_id);
