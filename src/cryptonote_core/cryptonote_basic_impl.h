@@ -53,13 +53,13 @@ std::ostream &print256(std::ostream &o, const T &v) {
   return o << "<" << epee::string_tools::pod_to_hex(v) << ">";
 }
 
-bool parse_hash256(const std::string str_hash, crypto::hash& hash);
+bool parse_hash256(const std::string str_hash, Crypto::hash& hash);
 
 namespace crypto {
-  inline std::ostream &operator <<(std::ostream &o, const crypto::public_key &v) { return print256(o, v); }
-  inline std::ostream &operator <<(std::ostream &o, const crypto::secret_key &v) { return print256(o, v); }
-  inline std::ostream &operator <<(std::ostream &o, const crypto::key_derivation &v) { return print256(o, v); }
-  inline std::ostream &operator <<(std::ostream &o, const crypto::key_image &v) { return print256(o, v); }
-  inline std::ostream &operator <<(std::ostream &o, const crypto::signature &v) { return print256(o, v); }
-  inline std::ostream &operator <<(std::ostream &o, const crypto::hash &v) { return print256(o, v); }
-}
+  inline std::ostream &operator <<(std::ostream &o, const Crypto::public_key &v) { return print256(o, v); }
+  inline std::ostream &operator <<(std::ostream &o, const Crypto::secret_key &v) { return print256(o, v); }
+  inline std::ostream &operator <<(std::ostream &o, const Crypto::key_derivation &v) { return print256(o, v); }
+  inline std::ostream &operator <<(std::ostream &o, const Crypto::key_image &v) { return print256(o, v); }
+  inline std::ostream &operator <<(std::ostream &o, const Crypto::signature &v) { return print256(o, v); }
+  inline std::ostream &operator <<(std::ostream &o, const Crypto::hash &v) { return print256(o, v); }
+} 
