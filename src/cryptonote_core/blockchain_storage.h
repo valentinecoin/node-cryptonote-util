@@ -73,7 +73,7 @@ namespace cryptonote
 
     bool have_tx(const Crypto::Hash &id);
     bool have_tx_keyimges_as_spent(const transaction &tx);
-    bool have_tx_keyimg_as_spent(const Crypto::key_image &key_im);
+    bool have_tx_keyimg_as_spent(const Crypto::KeyImage &key_im);
     transaction *get_tx(const Crypto::Hash &id);
 
     template<class visitor_t>
@@ -156,7 +156,7 @@ namespace cryptonote
   private:
     typedef std::unordered_map<Crypto::Hash, size_t> blocks_by_id_index;
     typedef std::unordered_map<Crypto::Hash, transaction_chain_entry> transactions_container;
-    typedef std::unordered_set<Crypto::key_image> key_images_container;
+    typedef std::unordered_set<Crypto::KeyImage> key_images_container;
     typedef std::vector<block_extended_info> blocks_container;
     typedef std::unordered_map<Crypto::Hash, block_extended_info> blocks_ext_by_hash;
     typedef std::unordered_map<Crypto::Hash, block> blocks_by_hash;
