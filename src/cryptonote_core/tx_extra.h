@@ -100,7 +100,7 @@ namespace cryptonote
     };
 
     size_t depth;
-    Crypto::hash merkle_root;
+    Crypto::Hash merkle_root;
 
     // load
     template <template <bool> class Archive>
