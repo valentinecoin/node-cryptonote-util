@@ -102,7 +102,7 @@ namespace cryptonote
      bool check_tx_semantic(const transaction& tx, bool keeped_by_block);
      //check if tx already in memory pool or in main blockchain
 
-     bool is_key_image_spent(const Crypto::key_image& key_im);
+     bool is_key_image_spent(const Crypto::KeyImage& key_im);
 
      bool check_tx_ring_signature(const txin_to_key& tx, const Crypto::Hash& tx_prefix_hash, const std::vector<Crypto::Signature>& sig);
      bool is_tx_spendtime_unlocked(uint64_t unlock_time);
