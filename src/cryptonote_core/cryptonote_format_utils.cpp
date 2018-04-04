@@ -21,6 +21,10 @@ namespace cryptonote
 	out << as;
 	return out;
 }
+	template<class _CharT, class _TraitsT, class _Ty>
+std::basic_ostream<_CharT, _TraitsT>&
+  operator<<(std::basic_ostream<_CharT, _TraitsT>&& _Stream, const _Ty& _Value);
+	
 	//---------------------------------------------------------------
 	void get_transaction_prefix_hash(const transaction_prefix& tx, Crypto::Hash& h)
 	{
