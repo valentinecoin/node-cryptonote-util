@@ -98,7 +98,7 @@ namespace cryptonote
 		uint64_t summary_amounts = 0;
 		for (size_t no = 0; no < out_amounts.size(); no++)
 		{
-			Crypto::KeyDerivation = AUTO_VAL_INIT(derivation);;
+			Crypto::KeyDerivation derivation = AUTO_VAL_INIT(derivation);;
 			Crypto::PublicKey out_eph_public_key = AUTO_VAL_INIT(out_eph_public_key);
 			bool r = Crypto::generate_key_derivation(miner_address.m_view_public_key, txkey.sec, derivation);
 //			CHECK_AND_ASSERT_MES(r, false, "while creating outs: failed to generate_key_derivation(" << miner_address.m_view_public_key << ", " << txkey.sec << ")");
@@ -532,7 +532,7 @@ namespace cryptonote
 	std::string short_hash_str(const Crypto::Hash& h)
 	{
 		std::string res = string_tools::pod_to_hex(h);
-//		CHECK_AND_ASSERT_MES(res.size() == 64, res, "wrong hash256 with string_tools::pod_to_hex conversion");
+		CHECK_AND_ASSERT_MES(res.size() == 64, res, "wrong hash256 with string_tools::pod_to_hex conversion");
 		auto erased_pos = res.erase(8, 48);
 		res.insert(8, "....");
 		return res;
