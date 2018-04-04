@@ -39,7 +39,7 @@ namespace cryptonote
 		ss << tx_blob;
 		binary_archive<false> ba(ss);
 		bool r = ::serialization::serialize(ba, tx);
-//		CHECK_AND_ASSERT_MES(r, false, "Failed to parse transaction from blob");
+		CHECK_AND_ASSERT_MES(r, false, "Failed to parse transaction from blob");
 		return true;
 	}
 	//---------------------------------------------------------------
@@ -49,7 +49,7 @@ namespace cryptonote
 		ss << tx_blob;
 		binary_archive<false> ba(ss);
 		bool r = ::serialization::serialize(ba, tx);
-//		CHECK_AND_ASSERT_MES(r, false, "Failed to parse transaction from blob");
+		CHECK_AND_ASSERT_MES(r, false, "Failed to parse transaction from blob");
 		//TODO: validate tx
 
 		Crypto::cn_fast_hash(tx_blob.data(), tx_blob.size(), tx_hash);
@@ -88,7 +88,7 @@ namespace cryptonote
 			[&out_amounts](uint64_t a_chunk) { out_amounts.push_back(a_chunk); },
 			[&out_amounts](uint64_t a_dust) { out_amounts.push_back(a_dust); });
 
-//		CHECK_AND_ASSERT_MES(1 <= max_outs, false, "max_out must be non-zero");
+		CHECK_AND_ASSERT_MES(1 <= max_outs, false, "max_out must be non-zero");
 		while (max_outs < out_amounts.size())
 		{
 			out_amounts[out_amounts.size() - 2] += out_amounts.back();
@@ -101,7 +101,7 @@ namespace cryptonote
 			Crypto::KeyDerivation derivation = AUTO_VAL_INIT(derivation);;
 			Crypto::PublicKey out_eph_public_key = AUTO_VAL_INIT(out_eph_public_key);
 			bool r = Crypto::generate_key_derivation(miner_address.m_view_public_key, txkey.sec, derivation);
-//			CHECK_AND_ASSERT_MES(r, false, "while creating outs: failed to generate_key_derivation(" << miner_address.m_view_public_key << ", " << txkey.sec << ")");
+			CHECK_AND_ASSERT_MES(r, false, "while creating outs: failed to generate_key_derivation(" << miner_address.m_view_public_key << ", " << txkey.sec << ")");
 
 			r = Crypto::derive_public_key(derivation, no, miner_address.m_spend_public_key, out_eph_public_key);
 			CHECK_AND_ASSERT_MES(r, false, "while creating outs: failed to derive_public_key(" << derivation << ", " << no << ", " << miner_address.m_spend_public_key << ")");
@@ -115,7 +115,7 @@ namespace cryptonote
 			tx.vout.push_back(out);
 		}
 
-//		CHECK_AND_ASSERT_MES(summary_amounts == block_reward, false, "Failed to construct miner tx, summary_amounts = " << summary_amounts << " not equal block_reward = " << block_reward);
+		CHECK_AND_ASSERT_MES(summary_amounts == block_reward, false, "Failed to construct miner tx, summary_amounts = " << summary_amounts << " not equal block_reward = " << block_reward);
 
 		tx.version = CURRENT_TRANSACTION_VERSION;
 		//lock
@@ -192,7 +192,7 @@ namespace cryptonote
 		uint64_t amount_out = 0;
 		BOOST_FOREACH(auto& in, tx.vin)
 		{
-//			CHECK_AND_ASSERT_MES(in.type() == typeid(txin_to_key), 0, "unexpected type id in transaction");
+			CHECK_AND_ASSERT_MES(in.type() == typeid(txin_to_key), 0, "unexpected type id in transaction");
 			amount_in += boost::get<txin_to_key>(in).amount;
 		}
 		BOOST_FOREACH(auto& o, tx.vout)
@@ -227,14 +227,14 @@ namespace cryptonote
 		{
 			tx_extra_field field;
 			bool r = ::do_serialize(ar, field);
-//			CHECK_AND_NO_ASSERT_MES(r, false, "failed to deserialize extra field. extra = " << string_tools::buff_to_hex_nodelimer(std::string(reinterpret_cast<const char*>(tx_extra.data()), tx_extra.size())));
+			CHECK_AND_NO_ASSERT_MES(r, false, "failed to deserialize extra field. extra = " << string_tools::buff_to_hex_nodelimer(std::string(reinterpret_cast<const char*>(tx_extra.data()), tx_extra.size())));
 			tx_extra_fields.push_back(field);
 
 			std::ios_base::iostate state = iss.rdstate();
 			eof = (EOF == iss.peek());
 			iss.clear(state);
 		}
-//		CHECK_AND_NO_ASSERT_MES(::serialization::check_stream_state(ar), false, "failed to deserialize extra field. extra = " << string_tools::buff_to_hex_nodelimer(std::string(reinterpret_cast<const char*>(tx_extra.data()), tx_extra.size())));
+		CHECK_AND_NO_ASSERT_MES(::serialization::check_stream_state(ar), false, "failed to deserialize extra field. extra = " << string_tools::buff_to_hex_nodelimer(std::string(reinterpret_cast<const char*>(tx_extra.data()), tx_extra.size())));
 
 		return true;
 	}
@@ -266,7 +266,7 @@ namespace cryptonote
 	//---------------------------------------------------------------
 	bool add_extra_nonce_to_tx_extra(std::vector<uint8_t>& tx_extra, const blobdata& extra_nonce)
 	{
-//		CHECK_AND_ASSERT_MES(extra_nonce.size() <= TX_EXTRA_NONCE_MAX_COUNT, false, "extra nonce could be 255 bytes max");
+		CHECK_AND_ASSERT_MES(extra_nonce.size() <= TX_EXTRA_NONCE_MAX_COUNT, false, "extra nonce could be 255 bytes max");
 		size_t start_pos = tx_extra.size();
 		tx_extra.resize(tx_extra.size() + 2 + extra_nonce.size());
 		//write tag
@@ -387,7 +387,7 @@ namespace cryptonote
 		size_t output_index = 0;
 		BOOST_FOREACH(const tx_destination_entry& dst_entr, shuffled_dsts)
 		{
-//			CHECK_AND_ASSERT_MES(dst_entr.amount > 0, false, "Destination with wrong amount: " << dst_entr.amount);
+			CHECK_AND_ASSERT_MES(dst_entr.amount > 0, false, "Destination with wrong amount: " << dst_entr.amount);
 			Crypto::KeyDerivation derivation;
 			Crypto::PublicKey out_eph_public_key;
 			bool r = Crypto::generate_key_derivation(dst_entr.addr.m_view_public_key, txkey.sec, derivation);
@@ -440,7 +440,7 @@ namespace cryptonote
 			i++;
 		}
 
-//		LOG_PRINT2("construct_tx.log", "transaction_created: " << get_transaction_hash(tx) << ENDL << obj_to_json_str(tx) << ENDL << ss_ring_s.str(), LOG_LEVEL_3);
+		LOG_PRINT2("construct_tx.log", "transaction_created: " << get_transaction_hash(tx) << ENDL << obj_to_json_str(tx) << ENDL << ss_ring_s.str(), LOG_LEVEL_3);
 
 		return true;
 	}
@@ -458,7 +458,7 @@ namespace cryptonote
 	//---------------------------------------------------------------
 	uint64_t get_block_height(const block& b)
 	{
-//		CHECK_AND_ASSERT_MES(b.miner_tx.vin.size() == 1, 0, "wrong miner tx in block: " << get_block_hash(b) << ", b.miner_tx.vin.size() != 1");
+		CHECK_AND_ASSERT_MES(b.miner_tx.vin.size() == 1, 0, "wrong miner tx in block: " << get_block_hash(b) << ", b.miner_tx.vin.size() != 1");
 		CHECKED_GET_SPECIFIC_VARIANT(b.miner_tx.vin[0], const txin_gen, coinbase_in, 0);
 		return coinbase_in.height;
 	}
@@ -467,9 +467,9 @@ namespace cryptonote
 	{
 		BOOST_FOREACH(const auto& in, tx.vin)
 		{
-//			CHECK_AND_ASSERT_MES(in.type() == typeid(txin_to_key), false, "wrong variant type: "
-//				<< in.type().name() << ", expected " << typeid(txin_to_key).name()
-//				<< ", in transaction id=" << get_transaction_hash(tx));
+			CHECK_AND_ASSERT_MES(in.type() == typeid(txin_to_key), false, "wrong variant type: "
+				<< in.type().name() << ", expected " << typeid(txin_to_key).name()
+				<< ", in transaction id=" << get_transaction_hash(tx));
 
 		}
 		return true;
@@ -479,11 +479,11 @@ namespace cryptonote
 	{
 		BOOST_FOREACH(const tx_out& out, tx.vout)
 		{
-//			CHECK_AND_ASSERT_MES(out.target.type() == typeid(txout_to_key), false, "wrong variant type: "
-//				<< out.target.type().name() << ", expected " << typeid(txout_to_key).name()
-//				<< ", in transaction id=" << get_transaction_hash(tx));
+			CHECK_AND_ASSERT_MES(out.target.type() == typeid(txout_to_key), false, "wrong variant type: "
+				<< out.target.type().name() << ", expected " << typeid(txout_to_key).name()
+				<< ", in transaction id=" << get_transaction_hash(tx));
 
-//			CHECK_AND_NO_ASSERT_MES(0 < out.amount, false, "zero amount ouput in transaction id=" << get_transaction_hash(tx));
+			CHECK_AND_NO_ASSERT_MES(0 < out.amount, false, "zero amount ouput in transaction id=" << get_transaction_hash(tx));
 
 			if (!check_key(boost::get<txout_to_key>(out.target).key))
 				return false;
@@ -561,7 +561,7 @@ namespace cryptonote
 		size_t i = 0;
 		BOOST_FOREACH(const tx_out& o, tx.vout)
 		{
-//			CHECK_AND_ASSERT_MES(o.target.type() == typeid(txout_to_key), false, "wrong type id in transaction out");
+			CHECK_AND_ASSERT_MES(o.target.type() == typeid(txout_to_key), false, "wrong type id in transaction out");
 			if (is_out_to_acc(acc, boost::get<txout_to_key>(o.target), tx_pub_key, i))
 			{
 				outs.push_back(i);
@@ -699,7 +699,7 @@ namespace cryptonote
 		blobdata tx_bl;
 		string_tools::parse_hexstr_to_binbuff(genesis_coinbase_tx_hex, tx_bl);
 		bool r = parse_and_validate_tx_from_blob(tx_bl, bl.miner_tx);
-//		CHECK_AND_ASSERT_MES(r, false, "failed to parse coinbase tx from hard coded blob");
+		CHECK_AND_ASSERT_MES(r, false, "failed to parse coinbase tx from hard coded blob");
 		bl.major_version = CURRENT_BLOCK_MAJOR_VERSION;
 		bl.minor_version = CURRENT_BLOCK_MINOR_VERSION;
 		bl.timestamp = 0;
@@ -786,7 +786,7 @@ namespace cryptonote
 		ss << b_blob;
 		binary_archive<false> ba(ss);
 		bool r = ::serialization::serialize(ba, b);
-//		CHECK_AND_ASSERT_MES(r, false, "Failed to parse block from blob");
+		CHECK_AND_ASSERT_MES(r, false, "Failed to parse block from blob");
 		return true;
 	}
 	bool parse_and_validate_block_from_blob(const blobdata& b_blob, bb_block& b)
@@ -893,7 +893,7 @@ namespace cryptonote
 		Crypto::Hash aux_blocks_merkle_root;
 		Crypto::tree_hash_from_branch(bl.parent_block.blockchain_branch.data(), bl.parent_block.blockchain_branch.size(),
 			aux_block_header_hash, &genesis_block_hash, aux_blocks_merkle_root);
-//		CHECK_AND_NO_ASSERT_MES(aux_blocks_merkle_root == mm_tag.merkle_root, false, "Aux block hash wasn't found in merkle tree");
+		CHECK_AND_NO_ASSERT_MES(aux_blocks_merkle_root == mm_tag.merkle_root, false, "Aux block hash wasn't found in merkle tree");
 
 		return true;
 	}
@@ -908,7 +908,7 @@ namespace cryptonote
 		case BLOCK_MAJOR_VERSION_7: return check_proof_of_work_v2(bl, current_diffic, proof_of_work);
 		}
 
-//		CHECK_AND_ASSERT_MES(false, false, "unknown block major version: " << bl.major_version << "." << bl.minor_version);
+		CHECK_AND_ASSERT_MES(false, false, "unknown block major version: " << bl.major_version << "." << bl.minor_version);
 	}
 	//---------------------------------------------------------------
 } 
