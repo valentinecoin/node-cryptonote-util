@@ -11,7 +11,6 @@
                 "src/crypto/crypto-ops-data.c",
                 "src/crypto/hash.c",
                 "src/crypto/keccak.c",
-                "src/slow-hash.c",
                 "src/common/base58.cpp",
             ],
             "include_dirs": [
