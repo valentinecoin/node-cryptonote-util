@@ -60,7 +60,7 @@ namespace cryptonote
     return m_blockchain_storage.get_current_blockchain_height();
   }
   //-----------------------------------------------------------------------------------------------
-  bool core::get_blockchain_top(uint64_t& height, crypto::hash& top_id)
+  bool core::get_blockchain_top(uint64_t& height, Crypto::hash& top_id)
   {
     top_id = m_blockchain_storage.get_tail_id(height);
     return true;
@@ -75,17 +75,17 @@ namespace cryptonote
   {
     return m_blockchain_storage.get_blocks(start_offset, count, blocks);
   }  //-----------------------------------------------------------------------------------------------
-  bool core::get_transactions(const std::vector<crypto::hash>& txs_ids, std::list<transaction>& txs, std::list<crypto::hash>& missed_txs)
+  bool core::get_transactions(const std::vector<Crypto::hash>& txs_ids, std::list<transaction>& txs, std::list<Crypto::hash>& missed_txs)
   {
     return m_blockchain_storage.get_transactions(txs_ids, txs, missed_txs);
   }
   //-----------------------------------------------------------------------------------------------
-  bool core::get_transaction(const crypto::hash &h, transaction &tx)
+  bool core::get_transaction(const Crypto::hash &h, transaction &tx)
   {
-    std::vector<crypto::hash> ids;
+    std::vector<Crypto::hash> ids;
     ids.push_back(h);
     std::list<transaction> ltx;
-    std::list<crypto::hash> missing;
+    std::list<Crypto::hash> missing;
     if (m_blockchain_storage.get_transactions(ids, ltx, missing))
     {
       if (ltx.size() > 0)
@@ -156,8 +156,8 @@ namespace cryptonote
       return false;
     }
 
-    crypto::hash tx_hash = null_hash;
-    crypto::hash tx_prefixt_hash = null_hash;
+    Crypto::hash tx_hash = null_hash;
+    Crypto::hash tx_prefixt_hash = null_hash;
     transaction tx;
 
     if(!parse_tx_from_blob(tx, tx_hash, tx_prefixt_hash, tx_blob))
@@ -259,7 +259,7 @@ namespace cryptonote
   //-----------------------------------------------------------------------------------------------
   bool core::check_tx_inputs_keyimages_diff(const transaction& tx)
   {
-    std::unordered_set<crypto::key_image> ki;
+    std::unordered_set<Crypto::key_image> ki;
     BOOST_FOREACH(const auto& in, tx.vin)
     {
       CHECKED_GET_SPECIFIC_VARIANT(in, const txin_to_key, tokey_in, false);
@@ -271,8 +271,8 @@ namespace cryptonote
   //-----------------------------------------------------------------------------------------------
   bool core::add_new_tx(const transaction& tx, tx_verification_context& tvc, bool keeped_by_block)
   {
-    crypto::hash tx_hash = get_transaction_hash(tx);
-    crypto::hash tx_prefix_hash = get_transaction_prefix_hash(tx);
+    Crypto::hash tx_hash = get_transaction_hash(tx);
+    Crypto::hash tx_prefix_hash = get_transaction_prefix_hash(tx);
     blobdata bl;
     t_serializable_object_to_blob(tx, bl);
     return add_new_tx(tx, tx_hash, tx_prefix_hash, bl.size(), tvc, keeped_by_block);
@@ -283,12 +283,12 @@ namespace cryptonote
     return m_blockchain_storage.get_total_transactions();
   }
   //-----------------------------------------------------------------------------------------------
-  bool core::get_outs(uint64_t amount, std::list<crypto::public_key>& pkeys)
+  bool core::get_outs(uint64_t amount, std::list<Crypto::public_key>& pkeys)
   {
     return m_blockchain_storage.get_outs(amount, pkeys);
   }
   //-----------------------------------------------------------------------------------------------
-  bool core::add_new_tx(const transaction& tx, const crypto::hash& tx_hash, const crypto::hash& tx_prefix_hash, size_t blob_size, tx_verification_context& tvc, bool keeped_by_block)
+  bool core::add_new_tx(const transaction& tx, const Crypto::hash& tx_hash, const Crypto::hash& tx_prefix_hash, size_t blob_size, tx_verification_context& tvc, bool keeped_by_block)
   {
     if(m_mempool.have_tx(tx_hash))
     {
@@ -310,12 +310,12 @@ namespace cryptonote
     return m_blockchain_storage.create_block_template(b, adr, diffic, height, ex_nonce);
   }
   //-----------------------------------------------------------------------------------------------
-  bool core::find_blockchain_supplement(const std::list<crypto::hash>& qblock_ids, NOTIFY_RESPONSE_CHAIN_ENTRY::request& resp)
+  bool core::find_blockchain_supplement(const std::list<Crypto::hash>& qblock_ids, NOTIFY_RESPONSE_CHAIN_ENTRY::request& resp)
   {
     return m_blockchain_storage.find_blockchain_supplement(qblock_ids, resp);
   }
   //-----------------------------------------------------------------------------------------------
-  bool core::find_blockchain_supplement(const std::list<crypto::hash>& qblock_ids, std::list<std::pair<block, std::list<transaction> > >& blocks, uint64_t& total_height, uint64_t& start_height, size_t max_count)
+  bool core::find_blockchain_supplement(const std::list<Crypto::hash>& qblock_ids, std::list<std::pair<block, std::list<transaction> > >& blocks, uint64_t& total_height, uint64_t& start_height, size_t max_count)
   {
     return m_blockchain_storage.find_blockchain_supplement(qblock_ids, blocks, total_height, start_height, max_count);
   }
@@ -340,7 +340,7 @@ namespace cryptonote
     return m_blockchain_storage.get_random_outs_for_amounts(req, res);
   }
   //-----------------------------------------------------------------------------------------------
-  bool core::get_tx_outputs_gindexs(const crypto::hash& tx_id, std::vector<uint64_t>& indexs)
+  bool core::get_tx_outputs_gindexs(const Crypto::hash& tx_id, std::vector<uint64_t>& indexs)
   {
     return m_blockchain_storage.get_tx_outputs_gindexs(tx_id, indexs);
   }
@@ -372,7 +372,7 @@ namespace cryptonote
       NOTIFY_NEW_BLOCK::request arg = AUTO_VAL_INIT(arg);
       arg.hop = 0;
       arg.current_blockchain_height = m_blockchain_storage.get_current_blockchain_height();
-      std::list<crypto::hash> missed_txs;
+      std::list<Crypto::hash> missed_txs;
       std::list<transaction> txs;
       m_blockchain_storage.get_transactions(b.tx_hashes, txs, missed_txs);
       if(missed_txs.size() &&  m_blockchain_storage.get_block_id_by_height(get_block_height(b)) != get_block_hash(b))
@@ -431,7 +431,7 @@ namespace cryptonote
     return true;
   }
   //-----------------------------------------------------------------------------------------------
-  crypto::hash core::get_tail_id()
+  Crypto::hash core::get_tail_id()
   {
     return m_blockchain_storage.get_tail_id();
   }
@@ -441,12 +441,12 @@ namespace cryptonote
     return m_mempool.get_transactions_count();
   }
   //-----------------------------------------------------------------------------------------------
-  bool core::have_block(const crypto::hash& id)
+  bool core::have_block(const Crypto::hash& id)
   {
     return m_blockchain_storage.have_block(id);
   }
   //-----------------------------------------------------------------------------------------------
-  bool core::parse_tx_from_blob(transaction& tx, crypto::hash& tx_hash, crypto::hash& tx_prefix_hash, const blobdata& blob)
+  bool core::parse_tx_from_blob(transaction& tx, Crypto::hash& tx_hash, Crypto::hash& tx_prefix_hash, const blobdata& blob)
   {
     return parse_and_validate_tx_from_blob(blob, tx, tx_hash, tx_prefix_hash);
   }
@@ -461,7 +461,7 @@ namespace cryptonote
     return m_mempool.get_transactions(txs);
   }
   //-----------------------------------------------------------------------------------------------
-  bool core::get_short_chain_history(std::list<crypto::hash>& ids)
+  bool core::get_short_chain_history(std::list<Crypto::hash>& ids)
   {
     return m_blockchain_storage.get_short_chain_history(ids);
   }
@@ -471,16 +471,16 @@ namespace cryptonote
     return m_blockchain_storage.handle_get_objects(arg, rsp);
   }
   //-----------------------------------------------------------------------------------------------
-  crypto::hash core::get_block_id_by_height(uint64_t height)
+  Crypto::hash core::get_block_id_by_height(uint64_t height)
   {
     return m_blockchain_storage.get_block_id_by_height(height);
   }
   //-----------------------------------------------------------------------------------------------
-  bool core::get_block_by_hash(const crypto::hash &h, block &blk) {
+  bool core::get_block_by_hash(const Crypto::hash &h, block &blk) {
     return m_blockchain_storage.get_block_by_hash(h, blk);
   }
   //-----------------------------------------------------------------------------------------------
-  void core::get_all_known_block_ids(std::list<crypto::hash> &main, std::list<crypto::hash> &alt, std::list<crypto::hash> &invalid) {
+  void core::get_all_known_block_ids(std::list<Crypto::hash> &main, std::list<Crypto::hash> &alt, std::list<Crypto::hash> &invalid) {
     m_blockchain_storage.get_all_known_block_ids(main, alt, invalid);
   }
   //-----------------------------------------------------------------------------------------------
@@ -516,4 +516,4 @@ namespace cryptonote
     return true;
   }
   //-----------------------------------------------------------------------------------------------
-}
+} 
