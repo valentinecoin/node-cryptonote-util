@@ -14,13 +14,13 @@
 
 // read
 template <template <bool> class Archive>
-bool do_serialize(Archive<false> &ar, std::vector<Crypto::signature> &v)
+bool do_serialize(Archive<false> &ar, std::vector<Crypto::Signature> &v)
 {
   size_t cnt = v.size();
   v.clear();
 
   // very basic sanity check
-  if (ar.remaining_bytes() < cnt*sizeof(Crypto::signature)) {
+  if (ar.remaining_bytes() < cnt*sizeof(Crypto::Signature)) {
     ar.stream().setstate(std::ios::failbit);
     return false;
   }
@@ -28,7 +28,7 @@ bool do_serialize(Archive<false> &ar, std::vector<Crypto::signature> &v)
   v.reserve(cnt);
   for (size_t i = 0; i < cnt; i++) {
     v.resize(i+1);
-    ar.serialize_blob(&(v[i]), sizeof(Crypto::signature), "");
+    ar.serialize_blob(&(v[i]), sizeof(Crypto::Signature), "");
     if (!ar.stream().good())
       return false;
   }
@@ -37,13 +37,13 @@ bool do_serialize(Archive<false> &ar, std::vector<Crypto::signature> &v)
 
 // write
 template <template <bool> class Archive>
-bool do_serialize(Archive<true> &ar, std::vector<Crypto::signature> &v)
+bool do_serialize(Archive<true> &ar, std::vector<Crypto::Signature> &v)
 {
   if (0 == v.size()) return true;
   ar.begin_string();
   size_t cnt = v.size();
   for (size_t i = 0; i < cnt; i++) {
-    ar.serialize_blob(&(v[i]), sizeof(Crypto::signature), "");
+    ar.serialize_blob(&(v[i]), sizeof(Crypto::Signature), "");
     if (!ar.stream().good())
       return false;
   }
@@ -53,14 +53,14 @@ bool do_serialize(Archive<true> &ar, std::vector<Crypto::signature> &v)
 
 BLOB_SERIALIZER(Crypto::chacha8_iv);
 BLOB_SERIALIZER(Crypto::Hash);
-BLOB_SERIALIZER(Crypto::public_key);
-BLOB_SERIALIZER(Crypto::secret_key);
+BLOB_SERIALIZER(Crypto::PublicKey);
+BLOB_SERIALIZER(Crypto::SecretKey);
 BLOB_SERIALIZER(Crypto::key_derivation);
 BLOB_SERIALIZER(Crypto::key_image);
-BLOB_SERIALIZER(Crypto::signature);
+BLOB_SERIALIZER(Crypto::Signature);
 VARIANT_TAG(debug_archive, Crypto::Hash, "hash");
-VARIANT_TAG(debug_archive, Crypto::public_key, "public_key");
-VARIANT_TAG(debug_archive, Crypto::secret_key, "secret_key");
+VARIANT_TAG(debug_archive, Crypto::PublicKey, "public_key");
+VARIANT_TAG(debug_archive, Crypto::SecretKey, "secret_key");
 VARIANT_TAG(debug_archive, Crypto::key_derivation, "key_derivation");
 VARIANT_TAG(debug_archive, Crypto::key_image, "key_image");
-VARIANT_TAG(debug_archive, Crypto::signature, "signature"); 
+VARIANT_TAG(debug_archive, Crypto::Signature, "signature"); 
