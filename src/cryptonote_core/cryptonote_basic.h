@@ -37,16 +37,16 @@ namespace cryptonote
   bool get_mm_tag_from_extra(const std::vector<uint8_t>& tx, tx_extra_merge_mining_tag& mm_tag);
 
   const static Crypto::Hash null_hash = AUTO_VAL_INIT(null_hash);
-  const static Crypto::public_key null_pkey = AUTO_VAL_INIT(null_pkey);
+  const static Crypto::PublicKey null_pkey = AUTO_VAL_INIT(null_pkey);
 
-  typedef std::vector<Crypto::signature> ring_signature;
+  typedef std::vector<Crypto::Signature> ring_signature;
 
 
   /* outputs */
 
   struct txout_to_script
   {
-    std::vector<Crypto::public_key> keys;
+    std::vector<Crypto::PublicKey> keys;
     std::vector<uint8_t> script;
 
     BEGIN_SERIALIZE_OBJECT()
@@ -63,16 +63,16 @@ namespace cryptonote
   struct txout_to_key
   {
     txout_to_key() { }
-    txout_to_key(const Crypto::public_key &_key) : key(_key) { }
-    Crypto::public_key key;
+    txout_to_key(const Crypto::PublicKey &_key) : key(_key) { }
+    Crypto::PublicKey key;
   };
 
   #pragma pack(push, 1)
   struct bb_txout_to_key
   {
     bb_txout_to_key() { }
-    bb_txout_to_key(const Crypto::public_key &_key) : key(_key) { }
-    Crypto::public_key key;
+    bb_txout_to_key(const Crypto::PublicKey &_key) : key(_key) { }
+    Crypto::PublicKey key;
     uint8_t mix_attr;
   };
   #pragma pack(pop)
@@ -188,7 +188,7 @@ namespace cryptonote
   class transaction: public transaction_prefix
   {
   public:
-    std::vector<std::vector<Crypto::signature> > signatures; //count signatures  always the same as inputs count
+    std::vector<std::vector<Crypto::Signature> > signatures; //count signatures  always the same as inputs count
 
     transaction();
     virtual ~transaction();
@@ -260,7 +260,7 @@ namespace cryptonote
   class bb_transaction: public bb_transaction_prefix
   {
   public:
-    std::vector<std::vector<Crypto::signature> > signatures; //count signatures  always the same as inputs count
+    std::vector<std::vector<Crypto::Signature> > signatures; //count signatures  always the same as inputs count
 
     bb_transaction();
     virtual ~bb_transaction();
@@ -533,8 +533,8 @@ namespace cryptonote
   /************************************************************************/
   struct account_public_address
   {
-    Crypto::public_key m_spend_public_key;
-    Crypto::public_key m_view_public_key;
+    Crypto::PublicKey m_spend_public_key;
+    Crypto::PublicKey m_view_public_key;
 
     BEGIN_SERIALIZE_OBJECT()
       FIELD(m_spend_public_key)
@@ -549,8 +549,8 @@ namespace cryptonote
 
   struct keypair
   {
-    Crypto::public_key pub;
-    Crypto::secret_key sec;
+    Crypto::PublicKey pub;
+    Crypto::SecretKey sec;
 
     static inline keypair generate()
     {
