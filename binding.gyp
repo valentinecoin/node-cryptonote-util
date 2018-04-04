@@ -16,7 +16,6 @@
             "include_dirs": [
                 "src",
                 "src/contrib/epee/include",
-                "include",
             ],
             "link_settings": {
                 "libraries": [
