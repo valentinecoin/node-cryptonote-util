@@ -204,7 +204,7 @@ namespace nodetool
   {
     peerid_type peer_id;
     uint64_t    time;
-    Crypto::signature sign;
+    Crypto::Signature sign;
 
     BEGIN_KV_SERIALIZE_MAP()
       KV_SERIALIZE(peer_id)
