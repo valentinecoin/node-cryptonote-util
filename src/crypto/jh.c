@@ -364,4 +364,4 @@ HashReturn jh_hash(int hashbitlen, const BitSequence *data,DataLength databitlen
       }
       else
             return(BAD_HASHLEN);
-}
+} 
