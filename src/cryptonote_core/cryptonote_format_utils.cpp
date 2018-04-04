@@ -16,7 +16,7 @@ using namespace epee;
 namespace cryptonote
 {
 	//---------------------------------------------------------------
-	void get_transaction_prefix_hash(const transaction_prefix& tx, Crypto::hash& h)
+	void get_transaction_prefix_hash(const transaction_prefix& tx, Crypto::Hash& h)
 	{
 		std::ostringstream s;
 		binary_archive<true> a(s);
@@ -24,9 +24,9 @@ namespace cryptonote
 		Crypto::cn_fast_hash(s.str().data(), s.str().size(), h);
 	}
 	//---------------------------------------------------------------
-	Crypto::hash get_transaction_prefix_hash(const transaction_prefix& tx)
+	Crypto::Hash get_transaction_prefix_hash(const transaction_prefix& tx)
 	{
-		Crypto::hash h = null_hash;
+		Crypto::Hash h = null_hash;
 		get_transaction_prefix_hash(tx, h);
 		return h;
 	}
@@ -41,7 +41,7 @@ namespace cryptonote
 		return true;
 	}
 	//---------------------------------------------------------------
-	bool parse_and_validate_tx_from_blob(const blobdata& tx_blob, transaction& tx, Crypto::hash& tx_hash, Crypto::hash& tx_prefix_hash)
+	bool parse_and_validate_tx_from_blob(const blobdata& tx_blob, transaction& tx, Crypto::Hash& tx_hash, Crypto::Hash& tx_prefix_hash)
 	{
 		std::stringstream ss;
 		ss << tx_blob;
@@ -97,7 +97,7 @@ namespace cryptonote
 		for (size_t no = 0; no < out_amounts.size(); no++)
 		{
 			Crypto::key_derivation derivation = AUTO_VAL_INIT(derivation);;
-			Crypto::public_key out_eph_public_key = AUTO_VAL_INIT(out_eph_public_key);
+			Crypto::PublicKey out_eph_public_key = AUTO_VAL_INIT(out_eph_public_key);
 			bool r = Crypto::generate_key_derivation(miner_address.m_view_public_key, txkey.sec, derivation);
 			CHECK_AND_ASSERT_MES(r, false, "while creating outs: failed to generate_key_derivation(" << miner_address.m_view_public_key << ", " << txkey.sec << ")");
 
@@ -124,7 +124,7 @@ namespace cryptonote
 		return true;
 	}
 	//---------------------------------------------------------------
-	bool generate_key_image_helper(const account_keys& ack, const Crypto::public_key& tx_public_key, size_t real_output_index, keypair& in_ephemeral, Crypto::key_image& ki)
+	bool generate_key_image_helper(const account_keys& ack, const Crypto::PublicKey& tx_public_key, size_t real_output_index, keypair& in_ephemeral, Crypto::key_image& ki)
 	{
 		Crypto::key_derivation recv_derivation = AUTO_VAL_INIT(recv_derivation);
 		bool r = Crypto::generate_key_derivation(tx_public_key, ack.m_view_secret_key, recv_derivation);
@@ -237,7 +237,7 @@ namespace cryptonote
 		return true;
 	}
 	//---------------------------------------------------------------
-	Crypto::public_key get_tx_pub_key_from_extra(const std::vector<uint8_t>& tx_extra)
+	Crypto::PublicKey get_tx_pub_key_from_extra(const std::vector<uint8_t>& tx_extra)
 	{
 		std::vector<tx_extra_field> tx_extra_fields;
 		parse_tx_extra(tx_extra, tx_extra_fields);
@@ -249,16 +249,16 @@ namespace cryptonote
 		return pub_key_field.pub_key;
 	}
 	//---------------------------------------------------------------
-	Crypto::public_key get_tx_pub_key_from_extra(const transaction& tx)
+	Crypto::PublicKey get_tx_pub_key_from_extra(const transaction& tx)
 	{
 		return get_tx_pub_key_from_extra(tx.extra);
 	}
 	//---------------------------------------------------------------
-	bool add_tx_pub_key_to_extra(transaction& tx, const Crypto::public_key& tx_pub_key)
+	bool add_tx_pub_key_to_extra(transaction& tx, const Crypto::PublicKey& tx_pub_key)
 	{
-		tx.extra.resize(tx.extra.size() + 1 + sizeof(Crypto::public_key));
-		tx.extra[tx.extra.size() - 1 - sizeof(Crypto::public_key)] = TX_EXTRA_TAG_PUBKEY;
-		*reinterpret_cast<Crypto::public_key*>(&tx.extra[tx.extra.size() - sizeof(Crypto::public_key)]) = tx_pub_key;
+		tx.extra.resize(tx.extra.size() + 1 + sizeof(Crypto::PublicKey));
+		tx.extra[tx.extra.size() - 1 - sizeof(Crypto::PublicKey)] = TX_EXTRA_TAG_PUBKEY;
+		*reinterpret_cast<Crypto::PublicKey*>(&tx.extra[tx.extra.size() - sizeof(Crypto::PublicKey)]) = tx_pub_key;
 		return true;
 	}
 	//---------------------------------------------------------------
@@ -298,7 +298,7 @@ namespace cryptonote
 		return find_tx_extra_field_by_type(tx_extra_fields, mm_tag);
 	}
 	//---------------------------------------------------------------
-	void set_payment_id_to_tx_extra_nonce(blobdata& extra_nonce, const Crypto::hash& payment_id)
+	void set_payment_id_to_tx_extra_nonce(blobdata& extra_nonce, const Crypto::Hash& payment_id)
 	{
 		extra_nonce.clear();
 		extra_nonce.push_back(TX_EXTRA_NONCE_PAYMENT_ID);
@@ -306,13 +306,13 @@ namespace cryptonote
 		std::copy(payment_id_ptr, payment_id_ptr + sizeof(payment_id), std::back_inserter(extra_nonce));
 	}
 	//---------------------------------------------------------------
-	bool get_payment_id_from_tx_extra_nonce(const blobdata& extra_nonce, Crypto::hash& payment_id)
+	bool get_payment_id_from_tx_extra_nonce(const blobdata& extra_nonce, Crypto::Hash& payment_id)
 	{
-		if (sizeof(Crypto::hash) + 1 != extra_nonce.size())
+		if (sizeof(Crypto::Hash) + 1 != extra_nonce.size())
 			return false;
 		if (TX_EXTRA_NONCE_PAYMENT_ID != extra_nonce[0])
 			return false;
-		payment_id = *reinterpret_cast<const Crypto::hash*>(extra_nonce.data() + 1);
+		payment_id = *reinterpret_cast<const Crypto::Hash*>(extra_nonce.data() + 1);
 		return true;
 	}
 	//---------------------------------------------------------------
@@ -387,7 +387,7 @@ namespace cryptonote
 		{
 			CHECK_AND_ASSERT_MES(dst_entr.amount > 0, false, "Destination with wrong amount: " << dst_entr.amount);
 			Crypto::key_derivation derivation;
-			Crypto::public_key out_eph_public_key;
+			Crypto::PublicKey out_eph_public_key;
 			bool r = Crypto::generate_key_derivation(dst_entr.addr.m_view_public_key, txkey.sec, derivation);
 			CHECK_AND_ASSERT_MES(r, false, "at creation outs: failed to generate_key_derivation(" << dst_entr.addr.m_view_public_key << ", " << txkey.sec << ")");
 
@@ -413,7 +413,7 @@ namespace cryptonote
 
 
 		//generate ring signatures
-		Crypto::hash tx_prefix_hash;
+		Crypto::Hash tx_prefix_hash;
 		get_transaction_prefix_hash(tx, tx_prefix_hash);
 
 		std::stringstream ss_ring_s;
@@ -421,19 +421,19 @@ namespace cryptonote
 		BOOST_FOREACH(const tx_source_entry& src_entr, sources)
 		{
 			ss_ring_s << "pub_keys:" << ENDL;
-			std::vector<const Crypto::public_key*> keys_ptrs;
+			std::vector<const Crypto::PublicKey*> keys_ptrs;
 			BOOST_FOREACH(const tx_source_entry::output_entry& o, src_entr.outputs)
 			{
 				keys_ptrs.push_back(&o.second);
 				ss_ring_s << o.second << ENDL;
 			}
 
-			tx.signatures.push_back(std::vector<Crypto::signature>());
-			std::vector<Crypto::signature>& sigs = tx.signatures.back();
+			tx.signatures.push_back(std::vector<Crypto::Signature>());
+			std::vector<Crypto::Signature>& sigs = tx.signatures.back();
 			sigs.resize(src_entr.outputs.size());
 			Crypto::generate_ring_signature(tx_prefix_hash, boost::get<txin_to_key>(tx.vin[i]).k_image, keys_ptrs, in_contexts[i].in_ephemeral.sec, src_entr.real_output, sigs.data());
 			ss_ring_s << "signatures:" << ENDL;
-			std::for_each(sigs.begin(), sigs.end(), [&](const Crypto::signature& s){ss_ring_s << s << ENDL; });
+			std::for_each(sigs.begin(), sigs.end(), [&](const Crypto::Signature& s){ss_ring_s << s << ENDL; });
 			ss_ring_s << "prefix_hash:" << tx_prefix_hash << ENDL << "in_ephemeral_key: " << in_contexts[i].in_ephemeral.sec << ENDL << "real_output: " << src_entr.real_output;
 			i++;
 		}
@@ -527,7 +527,7 @@ namespace cryptonote
 		return outputs_amount;
 	}
 	//---------------------------------------------------------------
-	std::string short_hash_str(const Crypto::hash& h)
+	std::string short_hash_str(const Crypto::Hash& h)
 	{
 		std::string res = string_tools::pod_to_hex(h);
 		CHECK_AND_ASSERT_MES(res.size() == 64, res, "wrong hash256 with string_tools::pod_to_hex conversion");
@@ -536,24 +536,24 @@ namespace cryptonote
 		return res;
 	}
 	//---------------------------------------------------------------
-	bool is_out_to_acc(const account_keys& acc, const txout_to_key& out_key, const Crypto::public_key& tx_pub_key, size_t output_index)
+	bool is_out_to_acc(const account_keys& acc, const txout_to_key& out_key, const Crypto::PublicKey& tx_pub_key, size_t output_index)
 	{
 		Crypto::key_derivation derivation;
 		generate_key_derivation(tx_pub_key, acc.m_view_secret_key, derivation);
-		Crypto::public_key pk;
+		Crypto::PublicKey pk;
 		derive_public_key(derivation, output_index, acc.m_account_address.m_spend_public_key, pk);
 		return pk == out_key.key;
 	}
 	//---------------------------------------------------------------
 	bool lookup_acc_outs(const account_keys& acc, const transaction& tx, std::vector<size_t>& outs, uint64_t& money_transfered)
 	{
-		Crypto::public_key tx_pub_key = get_tx_pub_key_from_extra(tx);
+		Crypto::PublicKey tx_pub_key = get_tx_pub_key_from_extra(tx);
 		if (null_pkey == tx_pub_key)
 			return false;
 		return lookup_acc_outs(acc, tx, tx_pub_key, outs, money_transfered);
 	}
 	//---------------------------------------------------------------
-	bool lookup_acc_outs(const account_keys& acc, const transaction& tx, const Crypto::public_key& tx_pub_key, std::vector<size_t>& outs, uint64_t& money_transfered)
+	bool lookup_acc_outs(const account_keys& acc, const transaction& tx, const Crypto::PublicKey& tx_pub_key, std::vector<size_t>& outs, uint64_t& money_transfered)
 	{
 		money_transfered = 0;
 		size_t i = 0;
@@ -570,7 +570,7 @@ namespace cryptonote
 		return true;
 	}
 	//---------------------------------------------------------------
-	void get_blob_hash(const blobdata& blob, Crypto::hash& res)
+	void get_blob_hash(const blobdata& blob, Crypto::Hash& res)
 	{
 		cn_fast_hash(blob.data(), blob.size(), res);
 	}
@@ -586,35 +586,35 @@ namespace cryptonote
 		return s;
 	}
 	//---------------------------------------------------------------
-	Crypto::hash get_blob_hash(const blobdata& blob)
+	Crypto::Hash get_blob_hash(const blobdata& blob)
 	{
-		Crypto::hash h = null_hash;
+		Crypto::Hash h = null_hash;
 		get_blob_hash(blob, h);
 		return h;
 	}
 	//---------------------------------------------------------------
-	Crypto::hash get_transaction_hash(const transaction& t)
+	Crypto::Hash get_transaction_hash(const transaction& t)
 	{
-		Crypto::hash h = null_hash;
+		Crypto::Hash h = null_hash;
 		size_t blob_size = 0;
 		get_object_hash(t, h, blob_size);
 		return h;
 	}
 	//---------------------------------------------------------------
-	bool get_transaction_hash(const transaction& t, Crypto::hash& res)
+	bool get_transaction_hash(const transaction& t, Crypto::Hash& res)
 	{
 		size_t blob_size = 0;
 		return get_object_hash(t, res, blob_size);
 	}
 
-	bool get_transaction_hash(const bb_transaction& t, Crypto::hash& res)
+	bool get_transaction_hash(const bb_transaction& t, Crypto::Hash& res)
 	{
 		size_t blob_size = 0;
 		return get_object_hash(static_cast<const bb_transaction_prefix&>(t), res, blob_size);
 	}
 
 	//---------------------------------------------------------------
-	bool get_transaction_hash(const transaction& t, Crypto::hash& res, size_t& blob_size)
+	bool get_transaction_hash(const transaction& t, Crypto::Hash& res, size_t& blob_size)
 	{
 		return get_object_hash(t, res, blob_size);
 	}
@@ -622,7 +622,7 @@ namespace cryptonote
 	bool get_block_hashing_blob(const block& b, blobdata& blob)
 	{
 		blob = t_serializable_object_to_blob(static_cast<const block_header&>(b));
-		Crypto::hash tree_root_hash = get_tx_tree_hash(b);
+		Crypto::Hash tree_root_hash = get_tx_tree_hash(b);
 		blob.append(reinterpret_cast<const char*>(&tree_root_hash), sizeof(tree_root_hash));
 		blob.append(tools::get_varint_data(b.tx_hashes.size() + 1));
 
@@ -638,13 +638,13 @@ namespace cryptonote
 	blobdata get_block_hashing_blob(const bb_block& b)
 	{
 		blobdata blob = t_serializable_object_to_blob(static_cast<bb_block_header>(b));
-		Crypto::hash tree_root_hash = get_tx_tree_hash(b);
+		Crypto::Hash tree_root_hash = get_tx_tree_hash(b);
 		blob.append((const char*)&tree_root_hash, sizeof(tree_root_hash));
 		blob.append(tools::get_varint_data(b.tx_hashes.size() + 1));
 		return blob;
 	}
 	//---------------------------------------------------------------
-	bool get_block_hash(const block& b, Crypto::hash& res)
+	bool get_block_hash(const block& b, Crypto::Hash& res)
 	{
 		blobdata blob;
 		if (!get_block_hashing_blob(b, blob))
@@ -663,14 +663,14 @@ namespace cryptonote
 		return get_object_hash(blob, res);
 	}
 	//---------------------------------------------------------------
-	Crypto::hash get_block_hash(const block& b)
+	Crypto::Hash get_block_hash(const block& b)
 	{
-		Crypto::hash p = null_hash;
+		Crypto::Hash p = null_hash;
 		get_block_hash(b, p);
 		return p;
 	}
 	//---------------------------------------------------------------
-	bool get_block_header_hash(const block& b, Crypto::hash& res)
+	bool get_block_header_hash(const block& b, Crypto::Hash& res)
 	{
 		blobdata blob;
 		if (!get_block_hashing_blob(b, blob))
@@ -706,10 +706,10 @@ namespace cryptonote
 		return true;
 	}
 	//---------------------------------------------------------------
-	bool get_genesis_block_hash(Crypto::hash& h)
+	bool get_genesis_block_hash(Crypto::Hash& h)
 	{
 		static std::atomic<bool> cached(false);
-		static Crypto::hash genesis_block_hash;
+		static Crypto::Hash genesis_block_hash;
 		if (!cached)
 		{
 			static std::mutex m;
@@ -731,7 +731,7 @@ namespace cryptonote
 		return true;
 	}
 	//---------------------------------------------------------------
-	bool get_block_longhash(const block& b, Crypto::hash& res, uint64_t height)
+	bool get_block_longhash(const block& b, Crypto::Hash& res, uint64_t height)
 	{
 		blobdata bd;
 		if (!get_block_hashing_blob(b, bd))
@@ -760,14 +760,14 @@ namespace cryptonote
 		return res;
 	}
 	//---------------------------------------------------------------
-	Crypto::hash get_block_longhash(const block& b, uint64_t height)
+	Crypto::Hash get_block_longhash(const block& b, uint64_t height)
 	{
-		Crypto::hash p = null_hash;
+		Crypto::Hash p = null_hash;
 		get_block_longhash(b, p, height);
 		return p;
 	}
 	//---------------------------------------------------------------
-	bool get_bytecoin_block_longhash(const block& b, Crypto::hash& res)
+	bool get_bytecoin_block_longhash(const block& b, Crypto::Hash& res)
 	{
 		blobdata bd;
 		if (!get_bytecoin_block_hashing_blob(b, bd))
@@ -815,22 +815,22 @@ namespace cryptonote
 		return t_serializable_object_to_blob(tx, b_blob);
 	}
 	//---------------------------------------------------------------
-	void get_tx_tree_hash(const std::vector<Crypto::hash>& tx_hashes, Crypto::hash& h)
+	void get_tx_tree_hash(const std::vector<Crypto::Hash>& tx_hashes, Crypto::Hash& h)
 	{
 		tree_hash(tx_hashes.data(), tx_hashes.size(), h);
 	}
 	//---------------------------------------------------------------
-	Crypto::hash get_tx_tree_hash(const std::vector<Crypto::hash>& tx_hashes)
+	Crypto::Hash get_tx_tree_hash(const std::vector<Crypto::Hash>& tx_hashes)
 	{
-		Crypto::hash h = null_hash;
+		Crypto::Hash h = null_hash;
 		get_tx_tree_hash(tx_hashes, h);
 		return h;
 	}
 	//---------------------------------------------------------------
-	Crypto::hash get_tx_tree_hash(const block& b)
+	Crypto::Hash get_tx_tree_hash(const block& b)
 	{
-		std::vector<Crypto::hash> txs_ids;
-		Crypto::hash h = null_hash;
+		std::vector<Crypto::Hash> txs_ids;
+		Crypto::Hash h = null_hash;
 		size_t bl_sz = 0;
 		get_transaction_hash(b.miner_tx, h, bl_sz);
 		txs_ids.push_back(h);
@@ -838,10 +838,10 @@ namespace cryptonote
 			txs_ids.push_back(th);
 		return get_tx_tree_hash(txs_ids);
 	}
-	Crypto::hash get_tx_tree_hash(const bb_block& b)
+	Crypto::Hash get_tx_tree_hash(const bb_block& b)
 	{
-		std::vector<Crypto::hash> txs_ids;
-		Crypto::hash h = null_hash;
+		std::vector<Crypto::Hash> txs_ids;
+		Crypto::Hash h = null_hash;
 		get_transaction_hash(b.miner_tx, h);
 		txs_ids.push_back(h);
 		BOOST_FOREACH(auto& th, b.tx_hashes)
@@ -849,7 +849,7 @@ namespace cryptonote
 		return get_tx_tree_hash(txs_ids);
 	}
 	//---------------------------------------------------------------
-	bool check_proof_of_work_v1(const block& bl, difficulty_type current_diffic, Crypto::hash& proof_of_work)
+	bool check_proof_of_work_v1(const block& bl, difficulty_type current_diffic, Crypto::Hash& proof_of_work)
 	{
 		if (BLOCK_MAJOR_VERSION_1 != bl.major_version)
 			return false;
@@ -858,7 +858,7 @@ namespace cryptonote
 		return check_hash(proof_of_work, current_diffic);
 	}
 	//---------------------------------------------------------------
-	bool check_proof_of_work_v2(const block& bl, difficulty_type current_diffic, Crypto::hash& proof_of_work)
+	bool check_proof_of_work_v2(const block& bl, difficulty_type current_diffic, Crypto::Hash& proof_of_work)
 	{
 		if (BLOCK_MAJOR_VERSION_2 != bl.major_version || BLOCK_MAJOR_VERSION_3 != bl.major_version)
 			return false;
@@ -875,18 +875,18 @@ namespace cryptonote
 			return false;
 		}
 
-		Crypto::hash genesis_block_hash;
+		Crypto::Hash genesis_block_hash;
 		if (!get_genesis_block_hash(genesis_block_hash))
 			return false;
 
 		if (8 * sizeof(genesis_block_hash) < bl.parent_block.blockchain_branch.size())
 			return false;
 
-		Crypto::hash aux_block_header_hash;
+		Crypto::Hash aux_block_header_hash;
 		if (!get_block_header_hash(bl, aux_block_header_hash))
 			return false;
 
-		Crypto::hash aux_blocks_merkle_root;
+		Crypto::Hash aux_blocks_merkle_root;
 		Crypto::tree_hash_from_branch(bl.parent_block.blockchain_branch.data(), bl.parent_block.blockchain_branch.size(),
 			aux_block_header_hash, &genesis_block_hash, aux_blocks_merkle_root);
 		CHECK_AND_NO_ASSERT_MES(aux_blocks_merkle_root == mm_tag.merkle_root, false, "Aux block hash wasn't found in merkle tree");
@@ -894,7 +894,7 @@ namespace cryptonote
 		return true;
 	}
 	//---------------------------------------------------------------
-	bool check_proof_of_work(const block& bl, difficulty_type current_diffic, Crypto::hash& proof_of_work)
+	bool check_proof_of_work(const block& bl, difficulty_type current_diffic, Crypto::Hash& proof_of_work)
 	{
 		switch (bl.major_version)
 		{
@@ -906,4 +906,4 @@ namespace cryptonote
 		CHECK_AND_ASSERT_MES(false, false, "unknown block major version: " << bl.major_version << "." << bl.minor_version);
 	}
 	//---------------------------------------------------------------
-}
+} 
