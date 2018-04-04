@@ -169,18 +169,18 @@ namespace cryptonote {
 }
 
 //--------------------------------------------------------------------------------
-bool parse_hash256(const std::string str_hash, Crypto::hash& hash)
+bool parse_hash256(const std::string str_hash, Crypto::Hash& hash)
 {
   std::string buf;
   bool res = epee::string_tools::parse_hexstr_to_binbuff(str_hash, buf);
-  if (!res || buf.size() != sizeof(Crypto::hash))
+  if (!res || buf.size() != sizeof(Crypto::Hash))
   {
     std::cout << "invalid hash format: <" << str_hash << '>' << std::endl;
     return false;
   }
   else
   {
-    buf.copy(reinterpret_cast<char *>(&hash), sizeof(Crypto::hash));
+    buf.copy(reinterpret_cast<char *>(&hash), sizeof(Crypto::Hash));
     return true;
   }
 } 
