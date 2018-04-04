@@ -70,7 +70,7 @@ namespace cryptonote
      bool get_pool_transactions(std::list<transaction>& txs);
      size_t get_pool_transactions_count();
      size_t get_blockchain_total_transactions();
-     bool get_outs(uint64_t amount, std::list<Crypto::public_key>& pkeys);
+     bool get_outs(uint64_t amount, std::list<Crypto::PublicKey>& pkeys);
      bool have_block(const Crypto::Hash& id);
      bool get_short_chain_history(std::list<Crypto::Hash>& ids);
      bool find_blockchain_supplement(const std::list<Crypto::Hash>& qblock_ids, NOTIFY_RESPONSE_CHAIN_ENTRY::request& resp);
@@ -104,7 +104,7 @@ namespace cryptonote
 
      bool is_key_image_spent(const Crypto::key_image& key_im);
 
-     bool check_tx_ring_signature(const txin_to_key& tx, const Crypto::Hash& tx_prefix_hash, const std::vector<Crypto::signature>& sig);
+     bool check_tx_ring_signature(const txin_to_key& tx, const Crypto::Hash& tx_prefix_hash, const std::vector<Crypto::Signature>& sig);
      bool is_tx_spendtime_unlocked(uint64_t unlock_time);
      bool update_miner_block_template();
      bool handle_command_line(const boost::program_options::variables_map& vm);
