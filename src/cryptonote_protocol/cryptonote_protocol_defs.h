@@ -75,8 +75,8 @@ namespace cryptonote
 
     struct request
     {
-      std::list<crypto::hash>    txs;
-      std::list<crypto::hash>    blocks;
+      std::list<Crypto::hash>    txs;
+      std::list<Crypto::hash>    blocks;
 
       BEGIN_KV_SERIALIZE_MAP()
         KV_SERIALIZE_CONTAINER_POD_AS_BLOB(txs)
@@ -93,7 +93,7 @@ namespace cryptonote
     {
       std::list<blobdata>              txs;
       std::list<block_complete_entry>  blocks;
-      std::list<crypto::hash>               missed_ids;
+      std::list<Crypto::hash>               missed_ids;
       uint64_t                         current_blockchain_height;
 
       BEGIN_KV_SERIALIZE_MAP()
@@ -109,7 +109,7 @@ namespace cryptonote
   struct CORE_SYNC_DATA
   {
     uint64_t current_height;
-    crypto::hash  top_id;
+    Crypto::hash  top_id;
 
     BEGIN_KV_SERIALIZE_MAP()
       KV_SERIALIZE(current_height)
@@ -123,7 +123,7 @@ namespace cryptonote
 
     struct request
     {
-      std::list<crypto::hash> block_ids; /*IDs of the first 10 blocks are sequential, next goes with pow(2,n) offset, like 2, 4, 8, 16, 32, 64 and so on, and the last one is always genesis block */
+      std::list<Crypto::hash> block_ids; /*IDs of the first 10 blocks are sequential, next goes with pow(2,n) offset, like 2, 4, 8, 16, 32, 64 and so on, and the last one is always genesis block */
 
       BEGIN_KV_SERIALIZE_MAP()
         KV_SERIALIZE_CONTAINER_POD_AS_BLOB(block_ids)
@@ -139,7 +139,7 @@ namespace cryptonote
     {
       uint64_t start_height;
       uint64_t total_height;
-      std::list<crypto::hash> m_block_ids;
+      std::list<Crypto::hash> m_block_ids;
 
       BEGIN_KV_SERIALIZE_MAP()
         KV_SERIALIZE(start_height)
@@ -149,4 +149,4 @@ namespace cryptonote
     };
   };
 
-}
+} 
