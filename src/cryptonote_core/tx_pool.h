@@ -31,17 +31,17 @@ namespace cryptonote
   {
   public:
     tx_memory_pool(blockchain_storage& bchs);
-    bool add_tx(const transaction &tx, const Crypto::hash &id, size_t blob_size, tx_verification_context& tvc, bool keeped_by_block);
+    bool add_tx(const transaction &tx, const Crypto::Hash &id, size_t blob_size, tx_verification_context& tvc, bool keeped_by_block);
     bool add_tx(const transaction &tx, tx_verification_context& tvc, bool keeped_by_block);
     //gets tx and remove it from pool
-    bool take_tx(const Crypto::hash &id, transaction &tx, size_t& blob_size, uint64_t& fee);
+    bool take_tx(const Crypto::Hash &id, transaction &tx, size_t& blob_size, uint64_t& fee);
 
-    bool have_tx(const Crypto::hash &id);
+    bool have_tx(const Crypto::Hash &id);
     bool have_tx_keyimg_as_spent(const Crypto::key_image& key_im);
     bool have_tx_keyimges_as_spent(const transaction& tx);
 
-    bool on_blockchain_inc(uint64_t new_block_height, const Crypto::hash& top_block_id);
-    bool on_blockchain_dec(uint64_t new_block_height, const Crypto::hash& top_block_id);
+    bool on_blockchain_inc(uint64_t new_block_height, const Crypto::Hash& top_block_id);
+    bool on_blockchain_dec(uint64_t new_block_height, const Crypto::Hash& top_block_id);
 
     void lock();
     void unlock();
@@ -51,7 +51,7 @@ namespace cryptonote
     bool deinit();
     bool fill_block_template(block &bl, size_t median_size, uint64_t already_generated_coins, size_t &total_size, uint64_t &fee);
     bool get_transactions(std::list<transaction>& txs);
-    bool get_transaction(const Crypto::hash& h, transaction& tx);
+    bool get_transaction(const Crypto::Hash& h, transaction& tx);
     size_t get_transactions_count();
     bool remove_transaction_keyimages(const transaction& tx);
     bool have_key_images(const std::unordered_set<Crypto::key_image>& kic, const transaction& tx);
@@ -78,18 +78,18 @@ namespace cryptonote
       transaction tx;
       size_t blob_size;
       uint64_t fee;
-      Crypto::hash max_used_block_id;
+      Crypto::Hash max_used_block_id;
       uint64_t max_used_block_height;
       bool kept_by_block;
       //
       uint64_t last_failed_height;
-      Crypto::hash last_failed_id;
+      Crypto::Hash last_failed_id;
     };
 
   private:
     bool is_transaction_ready_to_go(tx_details& txd);
-    typedef std::unordered_map<Crypto::hash, tx_details > transactions_container;
-    typedef std::unordered_map<Crypto::key_image, std::unordered_set<Crypto::hash> > key_images_container;
+    typedef std::unordered_map<Crypto::Hash, tx_details > transactions_container;
+    typedef std::unordered_map<Crypto::key_image, std::unordered_set<Crypto::Hash> > key_images_container;
 
     epee::critical_section m_transactions_lock;
     transactions_container m_transactions;
