@@ -96,7 +96,7 @@ namespace cryptonote
 		uint64_t summary_amounts = 0;
 		for (size_t no = 0; no < out_amounts.size(); no++)
 		{
-			Crypto::PublicKey = AUTO_VAL_INIT(derivation);;
+			Crypto::KeyDerivation = AUTO_VAL_INIT(derivation);;
 			Crypto::PublicKey out_eph_public_key = AUTO_VAL_INIT(out_eph_public_key);
 			bool r = Crypto::generate_key_derivation(miner_address.m_view_public_key, txkey.sec, derivation);
 			CHECK_AND_ASSERT_MES(r, false, "while creating outs: failed to generate_key_derivation(" << miner_address.m_view_public_key << ", " << txkey.sec << ")");
@@ -126,7 +126,7 @@ namespace cryptonote
 	//---------------------------------------------------------------
 	bool generate_key_image_helper(const account_keys& ack, const Crypto::PublicKey& tx_public_key, size_t real_output_index, keypair& in_ephemeral, Crypto::KeyImage& ki)
 	{
-		Crypto::PublicKey recv_derivation = AUTO_VAL_INIT(recv_derivation);
+		Crypto::KeyDerivation recv_derivation = AUTO_VAL_INIT(recv_derivation);
 		bool r = Crypto::generate_key_derivation(tx_public_key, ack.m_view_secret_key, recv_derivation);
 		CHECK_AND_ASSERT_MES(r, false, "key image helper: failed to generate_key_derivation(" << tx_public_key << ", " << ack.m_view_secret_key << ")");
 
@@ -386,7 +386,7 @@ namespace cryptonote
 		BOOST_FOREACH(const tx_destination_entry& dst_entr, shuffled_dsts)
 		{
 			CHECK_AND_ASSERT_MES(dst_entr.amount > 0, false, "Destination with wrong amount: " << dst_entr.amount);
-			Crypto::PublicKey derivation;
+			Crypto::KeyDerivation derivation;
 			Crypto::PublicKey out_eph_public_key;
 			bool r = Crypto::generate_key_derivation(dst_entr.addr.m_view_public_key, txkey.sec, derivation);
 			CHECK_AND_ASSERT_MES(r, false, "at creation outs: failed to generate_key_derivation(" << dst_entr.addr.m_view_public_key << ", " << txkey.sec << ")");
