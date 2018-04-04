@@ -225,14 +225,14 @@ namespace cryptonote
 		{
 			tx_extra_field field;
 			bool r = ::do_serialize(ar, field);
-			CHECK_AND_NO_ASSERT_MES(r, false, "failed to deserialize extra field. extra = " << string_tools::buff_to_hex_nodelimer(std::string(reinterpret_cast<const char*>(tx_extra.data()), tx_extra.size())));
+//			CHECK_AND_NO_ASSERT_MES(r, false, "failed to deserialize extra field. extra = " << string_tools::buff_to_hex_nodelimer(std::string(reinterpret_cast<const char*>(tx_extra.data()), tx_extra.size())));
 			tx_extra_fields.push_back(field);
 
 			std::ios_base::iostate state = iss.rdstate();
 			eof = (EOF == iss.peek());
 			iss.clear(state);
 		}
-		CHECK_AND_NO_ASSERT_MES(::serialization::check_stream_state(ar), false, "failed to deserialize extra field. extra = " << string_tools::buff_to_hex_nodelimer(std::string(reinterpret_cast<const char*>(tx_extra.data()), tx_extra.size())));
+//		CHECK_AND_NO_ASSERT_MES(::serialization::check_stream_state(ar), false, "failed to deserialize extra field. extra = " << string_tools::buff_to_hex_nodelimer(std::string(reinterpret_cast<const char*>(tx_extra.data()), tx_extra.size())));
 
 		return true;
 	}
@@ -481,7 +481,7 @@ namespace cryptonote
 				<< out.target.type().name() << ", expected " << typeid(txout_to_key).name()
 				<< ", in transaction id=" << get_transaction_hash(tx));
 
-			CHECK_AND_NO_ASSERT_MES(0 < out.amount, false, "zero amount ouput in transaction id=" << get_transaction_hash(tx));
+//			CHECK_AND_NO_ASSERT_MES(0 < out.amount, false, "zero amount ouput in transaction id=" << get_transaction_hash(tx));
 
 			if (!check_key(boost::get<txout_to_key>(out.target).key))
 				return false;
@@ -891,7 +891,7 @@ namespace cryptonote
 		Crypto::Hash aux_blocks_merkle_root;
 		Crypto::tree_hash_from_branch(bl.parent_block.blockchain_branch.data(), bl.parent_block.blockchain_branch.size(),
 			aux_block_header_hash, &genesis_block_hash, aux_blocks_merkle_root);
-		CHECK_AND_NO_ASSERT_MES(aux_blocks_merkle_root == mm_tag.merkle_root, false, "Aux block hash wasn't found in merkle tree");
+//		CHECK_AND_NO_ASSERT_MES(aux_blocks_merkle_root == mm_tag.merkle_root, false, "Aux block hash wasn't found in merkle tree");
 
 		return true;
 	}
